@@ -1,0 +1,123 @@
+<div class="Home">
+  <h1 class="Home-title title">Spread the word: RUN LND</h1>
+  <div class="columns">
+    <div class="column">
+      <div class="Home-images">
+        <div class="Home-images-main">
+          <img class="Home-images-main-image" src="/client/images/shirt-front.jpg" />
+        </div>
+        <div class="Home-images-thumbs">
+          <img class="Home-images-thumbs-thumb is-active" src="/client/images/shirt-front-thumb.jpg" />
+          <img class="Home-images-thumbs-thumb" src="/client/images/shirt-front-thumb.jpg" />
+          <img class="Home-images-thumbs-thumb" src="/client/images/shirt-front-thumb.jpg" />
+        </div>
+      </div>
+      <div class="Home-description content">
+        <p>
+          Grab a limited edition RUN LND shirt so that you can let everyone
+          know you're routing & reckless.
+        </p>
+
+        <h3 class="title">Sizing</h2>
+        <table class="table is-bordered is-striped">
+          <thead>
+            <tr>
+              <th>Size</th>
+              <th>Length</th>
+              <th>Width</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <th>Small (S)</th>
+              <td>28"</td>
+              <td>19"</td>
+            </tr>
+            <tr>
+              <th>Medium (M)</th>
+              <td>29"</td>
+              <td>20.5"</td>
+            </tr>
+            <tr>
+              <th>Large (L)</th>
+              <td>30"</td>
+              <td>22"</td>
+            </tr>
+            <tr>
+              <th>Extra large (XL)</th>
+              <td>31"</td>
+              <td>24"</td>
+            </tr>
+          </tbody>
+        </table>
+        <sup>
+          Sizes run a little small, so bump it up if you're on the fence. Or
+          just show off that bod with a tight T, you do you.
+        </sup>
+
+        <h3 class="title">Shirt specs</h3>
+        <ul>
+          <li>4.3 oz. 100% combed ringspun cotton jersey</li>
+          <li>Super soft lightweight fabric</li>
+          <li>Tear-away neck label for comfort</li>
+          <li>Screen printed</li>
+        </ul>
+
+        <h3 class="title">Shipping</h2>
+        <p>Shipping price is included in the order.
+        <ul>
+          <li>US orders are expected to arrive 1-2 weeks after ordering</li>
+          <li>International orders are expected to arrive 2-3 weeks after ordering</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="column is-narrow">
+      <div class="Home-order box" style="width: 300px;">
+        <div class="Home-order-size field">
+        <label class="Home-order-size-label label">Size</label>
+          <div class="Home-order-size-select select">
+            <select id="orderSize">
+              <option value="">Select a Size</option>
+              <% stock.forEach(s => { %>
+                <option
+                  value="<%- s.size %>"
+                  <%- s.available <= 0 ? 'disabled' : ''%>
+                >
+                  <%- s.label %>
+                </option>
+              <% }); %>
+            </select>
+          </div>
+        </div>
+
+        <div class="Home-order-stocks field">
+          <label class="Home-order-stocks-label label">Availability</label>
+          <% stock.forEach(s => { %>
+            <div class="Home-order-stocks-stock">
+              <div class="Home-order-stocks-stock-label">
+                <%- s.size %>
+              </div>
+              <progress
+                class="Home-order-stocks-stock-bar progress is-small is-success"
+                value="<%- s.available / s.total * 100 %>"
+                max="100"
+              />
+            </div>
+          <% }); %>
+        </div>
+
+        <div class="Home-order-price field">
+          <label class="Home-order-price-label label">Price</label>
+          <div><%- price %> satoshis</div>
+        </div>
+
+        <div class="Home-order-submit">
+          <button id="orderSubmit" class="button is-medium is-fullwidth is-success">
+            Start order
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

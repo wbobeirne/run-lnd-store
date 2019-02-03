@@ -1,0 +1,51 @@
+.Gallery {
+  padding-bottom: 3rem;
+  margin-bottom: 3rem;
+  border-bottom: 1px solid rgba(#000, 0.08);
+
+  &-main {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background: #000;
+    overflow: hidden;
+    border-radius: 4px;
+    margin-bottom: 1rem;
+    max-height: 400px;
+
+    @media screen and (max-width: 680px) {
+      max-height: 260px;
+    }
+
+    &-image {
+      height: 100%;
+      width: auto;
+      max-width: none;
+      min-width: 0;
+    }
+  }
+
+  &-thumbs {
+    display: flex;
+    align-items: center;
+
+    &-thumb {
+      height: 5rem;
+      width: 5rem;
+      margin-right: 1rem;
+      cursor: pointer;
+
+      &:last-child {
+        margin-right: 0;
+      }
+
+      &:hover {
+        box-shadow: 0 0 0 4px rgba(#000, 0.2);
+      }
+
+      &.is-active {
+        box-shadow: 0 0 0 4px #000;
+      }
+    }
+  }
+}

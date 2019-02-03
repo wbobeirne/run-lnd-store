@@ -1,0 +1,42 @@
+.OrderBox {
+  min-width: 300px;
+
+  .field {
+    margin-bottom: 1rem;
+  }
+
+  &-size {
+    &-select {
+      &, select {
+        width: 100%;
+      }
+    }
+  }
+
+  &-stocks {
+    &-stock {
+      display: flex;
+      align-items: center;
+      margin-bottom: 0.5rem;
+      padding-right: 0.5rem;
+
+      &-label {
+        width: 26px;
+        text-align: center;
+        margin-right: 5px;
+        font-size: 0.8rem;
+        color: #000;
+      }
+
+      &-bar.progress {
+        height: 0.4rem;
+      }
+    }
+  }
+
+  &-price {
+    &-text {
+      font-size: 1.2rem;
+    }
+  }
+}

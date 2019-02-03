@@ -1,0 +1,13 @@
+.Home {
+  &-description {
+    &-quote {
+      margin: 1.5rem 0 3rem;
+      padding-left: 1rem;
+      font-size: 2rem;
+      opacity: 0.4;
+      font-family: Georgia, serif;
+      font-style: italic;
+      border-left: 4px solid rgba(#000, 0.3);
+    }
+  }
+}

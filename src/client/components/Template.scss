@@ -1,0 +1,17 @@
+.Template {
+  &-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 1rem 2rem;
+    margin-bottom: 1rem;
+  }
+
+  &-content {
+    padding: 0 2rem 5rem;
+  }
+
+  &-footer {
+    padding: 3rem;
+  }
+}
