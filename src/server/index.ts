@@ -31,10 +31,11 @@ sequelize.sync({ force: true }).then(() => {
   });
 
   // Testing out
+  const expires = new Date(Date.now() + env.INVOICE_EXPIRE_MINS * 60 * 1000);
   createInvoice({
     description: `RUN LND Shirt (M)`,
     tokens: env.SHIRT_COST,
-    expires_at: new Date(Date.now() + env.INVOICE_EXPIRE_MINS * 60 * 1000).toISOString(),
+    expires_at: expires.toISOString(),
     wss: [],
   }).then(invoice => {
     return Order.create({
@@ -42,6 +43,7 @@ sequelize.sync({ force: true }).then(() => {
       paymentRequest: invoice.request,
       preimage: invoice.secret,
       size: 'M',
+      expires,
     });
   }).then(order => {
     // console.log(order);

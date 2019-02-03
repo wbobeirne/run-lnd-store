@@ -1,4 +1,5 @@
 import React from 'react';
+import { withRouter, RouteComponentProps } from 'react-router';
 import { SIZE, SIZE_LABELS } from '../../server/constants';
 import { typedKeys, commaify } from '../../server/util';
 import api, { Stock } from '../lib/api';
@@ -10,7 +11,7 @@ interface State {
   stock: Stock | null;
 }
 
-export default class OrderBox extends React.PureComponent<{}, State> {
+class OrderBox extends React.PureComponent<RouteComponentProps, State> {
   state: State = {
     size: undefined,
     yOffset: 0,
@@ -50,8 +51,8 @@ export default class OrderBox extends React.PureComponent<{}, State> {
         <div className="OrderBox-size field">
           <label className="OrderBox-size-label label">Size</label>
           <div className="OrderBox-size-select select">
-            <select onChange={this.handleChangeSize} value={size} disabled={!stock}>
-              <option value="" disabled selected>Select a size</option>
+            <select onChange={this.handleChangeSize} value={size || ''} disabled={!stock}>
+              <option value="" disabled>Select a size</option>
               {typedKeys(SIZE).map(s => (
                 <option key={s} value={s}>{SIZE_LABELS[s]}</option>
               ))}
@@ -62,7 +63,7 @@ export default class OrderBox extends React.PureComponent<{}, State> {
         <div className="OrderBox-stocks field">
           <label className="OrderBox-stocks-label label">Availability</label>
           {typedKeys(SIZE).map(s => (
-            <div className="OrderBox-stocks-stock">
+            <div className="OrderBox-stocks-stock" key={s}>
               <div className="OrderBox-stocks-stock-label">
                 {s}
               </div>
@@ -77,7 +78,7 @@ export default class OrderBox extends React.PureComponent<{}, State> {
 
         <div className="OrderBox-submit">
           <button
-            className="button is-medium is-fullwidth is-black"
+            className="button is-medium is-fullwidth is-primary"
             onClick={this.handleSubmit}
             disabled={!size}
           >
@@ -103,6 +104,13 @@ export default class OrderBox extends React.PureComponent<{}, State> {
   };
 
   private handleSubmit = () => {
-    console.log(this.state.size);
+    const { size } = this.state;
+    if (!size) {
+      alert('Select a size first');
+      return;
+    };
+    this.props.history.push('/order', { size });
   };
 }
+
+export default withRouter(OrderBox);

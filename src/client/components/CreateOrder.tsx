@@ -1,5 +1,9 @@
 import React from 'react';
+import { withRouter, RouteComponentProps } from 'react-router';
 import SignMessage from './SignMessage';
+import Payment from './Payment';
+import { Order } from '../lib/api';
+import { SIZE } from '../../server/constants';
 import './CreateOrder.scss';
 
 enum STEP {
@@ -10,29 +14,57 @@ enum STEP {
 
 interface State {
   step: STEP;
-  pubkey: string | null;
   signature: string | null;
+  size: SIZE | null;
+  order: Order | null;
 }
 
-export default class CreateOrder extends React.PureComponent<{}, State> {
+type Props = RouteComponentProps;
+
+class CreateOrder extends React.PureComponent<RouteComponentProps, State> {
   state: State = {
     step: STEP.SIGN,
-    pubkey: null,
     signature: null,
+    size: null,
+    order: null,
   };
+  
+  constructor(props: Props) {
+    super(props);
+
+    if (props.location.state) {
+      const { size } = props.location.state;
+      this.state = {
+        ...this.state,
+        size,
+      };
+    }
+    else {
+      props.history.replace('/');
+      return;
+    }
+  }
 
   render() {
-    const { step, pubkey, signature } = this.state;
+    const { step, size, signature } = this.state;
+    if (!size) {
+      // We're going to redirect without it, don't bother rendering
+      return null;
+    }
+
     const steps = [{
       step: STEP.SIGN,
       title: 'Sign message',
-      render: () => <SignMessage onSubmit={this.handleSignSubmit} />,
+      render: () => <SignMessage onVerified={this.setSignature} />,
       isDisabled: false,
     }, {
       step: STEP.PAY,
       title: 'Payment',
-      render: () => <h1>Pay me pls</h1>,
-      isDisabled: !pubkey || !signature,
+      render: () => {
+        if (!signature || !size) throw new Error('Payment without signature or size');
+        return <Payment signature={signature} size={size} onPayment={this.setOrder} />;
+      },
+      isDisabled: !signature,
     }, {
       step: STEP.INFO,
       title: 'Shipping info',
@@ -58,7 +90,9 @@ export default class CreateOrder extends React.PureComponent<{}, State> {
           </ul>
         </nav>
         <div className="CreateOrder-step">
-          {activeStep.render()}
+          <div className="CreateOrder-step-container box">
+            {activeStep.render()}
+          </div>
         </div>
       </div>
     );
@@ -68,8 +102,17 @@ export default class CreateOrder extends React.PureComponent<{}, State> {
     this.setState({ step });
   };
 
-  private handleSignSubmit = (pubkey: string, signature: string) => {
-    this.setState({ pubkey, signature });
-    this.changeStep(STEP.PAY);
+  private setSignature = (signature: string) => {
+    this.setState({ signature }, () => {
+      this.changeStep(STEP.PAY);
+    });
+  };
+
+  private setOrder = (order: Order) => {
+    this.setState({ order }, () => {
+      this.changeStep(STEP.INFO);
+    });
   };
 }
+
+export default withRouter(CreateOrder);

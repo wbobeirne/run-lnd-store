@@ -4,10 +4,9 @@ import Loader from './Loader';
 import api, { NodeInfo } from '../lib/api';
 import { MESSAGE } from '../../server/constants';
 import './SignMessage.scss';
-import { node } from 'prop-types';
 
 interface Props {
-  onSubmit(pubkey: string, signature: string): void;
+  onVerified(signature: string): void;
 }
 
 interface State {
@@ -16,7 +15,6 @@ interface State {
   weblnSignError: string;
   isSubmitting: boolean;
   submitError: string;
-  pubkey: string;
   node: NodeInfo | null;
 }
 
@@ -27,7 +25,6 @@ export default class SignMessage extends React.Component<Props, State> {
     weblnSignError: '',
     isSubmitting: false,
     submitError: '',
-    pubkey: '',
     node: null,
   };
 
@@ -36,7 +33,7 @@ export default class SignMessage extends React.Component<Props, State> {
   }
 
   render() {
-    const { signature, isWeblnSigning, weblnSignError, isSubmitting, submitError, node, pubkey } = this.state;
+    const { signature, isWeblnSigning, weblnSignError, isSubmitting, submitError, node } = this.state;
 
     let content;
     if (node) {
@@ -47,8 +44,8 @@ export default class SignMessage extends React.Component<Props, State> {
             Validated you as <strong>{node.alias}</strong>
           </p>
           <button
-            className="SignMessage-success-continue button is-black is-medium"
-            onClick={() => this.props.onSubmit(pubkey, signature)}
+            className="SignMessage-success-continue button is-primary is-medium"
+            onClick={() => this.props.onVerified(signature)}
           >
             Continue to Payment
           </button>
@@ -58,14 +55,9 @@ export default class SignMessage extends React.Component<Props, State> {
           </button>
         </div>
       );
-    }
-    else if (isWeblnSigning) {
-      content = (
-        <div className="SignMessage-loading">
-          <Loader message="Signing with WebLN..." />
-        </div>
-      );
-    } else if(weblnSignError) {
+    } else if (isWeblnSigning) {
+      content = <Loader message="Signing with WebLN..." />;
+    } else if (weblnSignError) {
       content = (
         <div className="SignMessage-error">
           <div className="notification is-danger">
@@ -84,13 +76,13 @@ export default class SignMessage extends React.Component<Props, State> {
     } else {
       content = (
         <form className="SignMessage-form" onSubmit={this.submit}>
-          <div className="SignMessage-cli field">
+          <div className="SignMessage-form-cli field">
             <label className="label">CLI Command</label>
             <div className="control">
               <input className="input" readOnly value={`lncli signmessage "${MESSAGE}"`} />
             </div>
           </div>
-          <div className="SignMessage-signature field">
+          <div className="SignMessage-form-signature field">
             <label className="label">Message signature</label>
             <div className={`control ${isSubmitting ? 'is-loading' : ''}`}>
               <input
@@ -110,7 +102,7 @@ export default class SignMessage extends React.Component<Props, State> {
           )}
           <div className="buttons">
             <button
-              className="button is-black"
+              className="button is-primary"
               type="submit"
               disabled={isSubmitting}
             >
@@ -125,7 +117,7 @@ export default class SignMessage extends React.Component<Props, State> {
     }
 
     return (
-      <div className="SignMessage box">
+      <div className="SignMessage">
         {content}
       </div>
     );
@@ -195,7 +187,6 @@ export default class SignMessage extends React.Component<Props, State> {
       weblnSignError: '',
       isSubmitting: false,
       submitError: '',
-      pubkey: '',
       node: null,
     }, () => {
       this.weblnSign();

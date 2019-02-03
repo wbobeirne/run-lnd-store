@@ -50,6 +50,14 @@ export class Order extends Model<Order> {
     return !this.email;
   }
 
+  serialize() {
+    const json = this.toJSON();
+    delete json.deletedAt;
+    delete json.updatedAt;
+    delete json.preimage;
+    return json;
+  }
+
   // Static functions
   static getOrderForPubkey(pubkey: string) {
     return Order.findOne({

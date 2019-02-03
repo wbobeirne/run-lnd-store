@@ -23,6 +23,28 @@ export interface SignatureVerification {
   node: NodeInfo;
 }
 
+interface CreateOrGetOrderArgs {
+  size: SIZE;
+  message: string;
+  signature: string;
+}
+
+export interface Order {
+  id: number;
+  pubkey: string;
+  paymentRequest: string;
+  createdAt: string;
+  expires: string;
+  name: string | null;
+  email: string | null;
+  address1: string | null;
+  address2: string | null;
+  city: string | null;
+  state: string | null;
+  zip: string | null;
+  country: string | null;
+}
+
 export type Stock = { [key in SIZE]: StockInfo };
 
 class API {
@@ -39,6 +61,10 @@ class API {
 
   getNodeInfo(pubkey: string) {
     return this.request<NodeInfo>('GET', '/node', { pubkey });
+  }
+
+  createOrGetOrder(args: CreateOrGetOrderArgs) {
+    return this.request<Order>('POST', '/order', args);
   }
 
   verifySignature(message: string, signature: string) {

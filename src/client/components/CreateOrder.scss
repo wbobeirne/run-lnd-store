@@ -12,5 +12,15 @@
     display: flex;
     justify-content: center;
     align-items: center;
+
+    &-container {
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      width: 100%;
+      max-width: 580px;
+      min-height: 280px;
+    }
   }
 }

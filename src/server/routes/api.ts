@@ -66,7 +66,7 @@ router.post('/order', asyncHandler(async (req: Request, res: Response) => {
   // If we already have an order for them, return it
   const existingOrder = await Order.getOrderForPubkey(pubkey);
   if (existingOrder) {
-    return res.json({ data: existingOrder });
+    return res.json({ data: existingOrder.serialize() });
   }
 
   // Otherwise create a new invoice & order
@@ -85,7 +85,7 @@ router.post('/order', asyncHandler(async (req: Request, res: Response) => {
       paymentRequest: invoice.request,
       preimage: invoice.secret,
     });
-    res.status(201).json({ data: newOrder });
+    res.status(201).json({ data: newOrder.serialize() });
   } catch(err) {
     console.error(err);
     return res.status(500).json({ error: 'Failed to create invoice' });
