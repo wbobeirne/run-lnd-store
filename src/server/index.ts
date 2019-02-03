@@ -19,7 +19,7 @@ app.use('/client', express.static(path.join(__dirname, 'client')));
 // Routes
 app.use('/api', apiRouter);
 
-app.get('/', (_, res: Response) => {
+app.get('*', (_, res: Response) => {
   res.render('template');
 });
 

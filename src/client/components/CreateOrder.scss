@@ -1,0 +1,16 @@
+.CreateOrder {
+  &-nav {
+    &-item {
+      &.is-disabled {
+        pointer-events: none;
+        color: rgba(#000, 0.3);
+      }
+    }
+  }
+
+  &-step {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+}

@@ -14,6 +14,9 @@ export class Order extends Model<Order> {
   @Column({ allowNull: false })
   preimage!: string;
 
+  @Column({ allowNull: false })
+  expires!: Date;
+
   // Order details (All except size optional, come after invoice creation)
   @Column({ allowNull: false })
   size!: string;
@@ -48,6 +51,17 @@ export class Order extends Model<Order> {
   }
 
   // Static functions
+  static getOrderForPubkey(pubkey: string) {
+    return Order.findOne({
+      where: {
+        pubkey,
+        expires: {
+          $lt: new Date(),
+        },
+      },
+    })
+  }
+
   static async getStock() {
     // Initialize stocks. Copy paste instead of loop for easier TS typing.
     interface StockInfo {
@@ -79,7 +93,13 @@ export class Order extends Model<Order> {
     };
 
     // Reduce stock for each order. If it's pending, mark pending.
-    const orders = await Order.findAll();
+    const orders = await Order.findAll({
+      where: {
+        expires: {
+          $lt: new Date(),
+        },
+      },
+    });
     orders.forEach(o => {
       const size = o.size as SIZE;
       stocks[size].available = stocks[size].available - 1;

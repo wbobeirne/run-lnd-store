@@ -1,6 +1,7 @@
 import lnService from 'ln-service';
 import lnCreateInvoice from 'ln-service/createInvoice';
 import lnVerifyMessage from 'ln-service/verifyMessage';
+import lnGetNode from 'ln-service/getNode';
 import WebSocket from 'ws';
 import env from '../env';
 
@@ -62,3 +63,18 @@ export function verifyMessage(args: VerifyMessageArgs): Promise<VerifyMessageRes
   });
 }
 
+// Get node
+interface GetNodeResponse {
+  alias: string;
+  capacity: string;
+  channel_count: number;
+  color: string;
+}
+
+export function getNode(public_key: string): Promise<GetNodeResponse> {
+  return lnGetNode({
+    public_key,
+    lnd: readonlyLnd,
+    log: console.log,
+  });
+}

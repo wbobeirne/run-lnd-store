@@ -1,12 +1,12 @@
 import { Router, Request, Response, NextFunction } from 'express';
 import asyncHandler from 'express-async-handler';
-import { verifyMessage, createInvoice } from '../lib/ln-api';
+import { verifyMessage, createInvoice, getNode } from '../lib/ln-api';
 import { Order } from '../db';
 import env from '../env';
 
 const router = Router();
 
-async function verifyAndAssertUnique(message: string, signature: string, res: Response) {
+async function verify(message: string, signature: string, res: Response) {
   // First validate a message and get their pubkey
   let pubkey: string;
   try {
@@ -26,51 +26,70 @@ async function verifyAndAssertUnique(message: string, signature: string, res: Re
   return pubkey;
 }
 
-router.get('/stock', asyncHandler(async (req: Request, res: Response, _: NextFunction) => {
+router.get('/stock', asyncHandler(async (_, res: Response) => {
   const stock = await Order.getStock();
   res.json({ data: stock });
 }));
 
+router.get('/node', asyncHandler(async (req: Request, res: Response) => {
+  const { pubkey } = req.query;
+  const node = await getNode(pubkey);
+  res.json({ data: node });
+}));
+
 // Verify an LND signature
-router.post('/verify', async (req: Request, res: Response, next: NextFunction) => {
+router.post('/verify', asyncHandler(async (req: Request, res: Response) => {
   const { message, signature } = req.body;
-  const pubkey = await verifyAndAssertUnique(message, signature, res);
+  const pubkey = await verify(message, signature, res);
 
   if (pubkey) {
+    const node = await getNode(pubkey);
     return res.json({
       data: {
         pubkey,
+        node,
         valid: true,
       },
     });
   }
-
-  next();
-});
+}));
 
 // Verify the signature (again, to prevent cheaters) and create an invoice for them
-router.post('/order', async (req: Request, res: Response, next: NextFunction) => {
+router.post('/order', asyncHandler(async (req: Request, res: Response) => {
   const { message, signature, size } = req.body;
 
-  const pubkey = await verifyAndAssertUnique(message, signature, res);
+  const pubkey = await verify(message, signature, res);
   if (!pubkey) {
-    return next();
+    return;
   }
 
-  // Create an invoice
+  // If we already have an order for them, return it
+  const existingOrder = await Order.getOrderForPubkey(pubkey);
+  if (existingOrder) {
+    return res.json({ data: existingOrder });
+  }
+
+  // Otherwise create a new invoice & order
   try {
-    createInvoice({
+    const expires = new Date(Date.now() + env.INVOICE_EXPIRE_MINS * 60 * 1000);
+    const invoice = await createInvoice({
       description: `RUN LND Shirt (${size})`,
       tokens: env.SHIRT_COST,
-      expires_at: new Date(Date.now() + env.INVOICE_EXPIRE_MINS * 60 * 1000).toISOString(),
+      expires_at: expires.toISOString(),
       wss: [],
     });
+    const newOrder = await Order.create({
+      pubkey,
+      size,
+      expires,
+      paymentRequest: invoice.request,
+      preimage: invoice.secret,
+    });
+    res.status(201).json({ data: newOrder });
   } catch(err) {
     console.error(err);
-    return res.status(500).json({ error: 'Failed to create LN invoice' });
+    return res.status(500).json({ error: 'Failed to create invoice' });
   }
-
-  next();
-});
+}));
 
 export default router;

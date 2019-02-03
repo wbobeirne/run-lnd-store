@@ -12,3 +12,8 @@ declare module 'ln-service/verifyMessage' {
   const fn: any;
   export default fn;
 }
+
+declare module 'ln-service/getNode' {
+  const fn: any;
+  export default fn;
+}

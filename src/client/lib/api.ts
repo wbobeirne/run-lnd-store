@@ -9,6 +9,20 @@ export interface StockInfo {
   pending: boolean;
 }
 
+// Get node
+export interface NodeInfo {
+  alias: string;
+  capacity: string;
+  channel_count: number;
+  color: string;
+}
+
+export interface SignatureVerification {
+  pubkey: string;
+  valid: boolean;
+  node: NodeInfo;
+}
+
 export type Stock = { [key in SIZE]: StockInfo };
 
 class API {
@@ -23,11 +37,29 @@ class API {
     return this.request<Stock>('GET', '/stock');
   }
 
+  getNodeInfo(pubkey: string) {
+    return this.request<NodeInfo>('GET', '/node', { pubkey });
+  }
+
+  verifySignature(message: string, signature: string) {
+    return this.request<SignatureVerification>('POST', '/verify', {
+      message,
+      signature,
+    })
+    .then(res => {
+      if (res.valid) {
+        return res;
+      } else {
+        throw new Error('Message signature was invalid');
+      }
+    });
+  }
+
   // Internal fetch function
-  protected request<R extends object, A extends object | undefined = undefined>(
+  protected request<R extends object>(
     method: ApiMethod,
     path: string,
-    args?: A,
+    args?: object,
   ): Promise<R> {
     let body = null;
     let query = '';

@@ -1,0 +1,33 @@
+.SignMessage {
+  width: 100%;
+  max-width: 580px;
+
+  &-loading {
+    padding: 5rem;
+  }
+
+  &-cli {
+    .input {
+      font-family: 'Lucida Console', Monaco, monospace;
+    }
+  }
+
+  &-signature {
+    .input {
+      text-overflow: ellipsis;
+      padding-right: 30px;
+    }
+  }
+
+  &-success {
+    text-align: center;
+
+    &-text {
+      margin-bottom: 1.5rem;
+    }
+
+    &-continue {
+      margin-bottom: 0.5rem;
+    }
+  }
+}
