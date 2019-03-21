@@ -1,6 +1,6 @@
 import React from 'react';
 import QRCode from 'qrcode.react';
-import { requestProvider } from 'webln/lib/client';
+import { requestProvider } from 'webln';
 import Loader from './Loader';
 import api, { Order } from '../lib/api';
 import { MESSAGE, SIZE } from '../../server/constants';

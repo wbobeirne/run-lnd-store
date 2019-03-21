@@ -2,10 +2,9 @@ import express, { Response } from 'express';
 import bodyParser from 'body-parser';
 import path from 'path';
 import env from './env';
-import { createInvoice } from './lib/ln-api';
-import { sequelize, Order } from './db';
+import { sequelize } from './db';
+import { initLnApi } from './lib/ln-api';
 import apiRouter from './routes/api';
-import viewsRouter from './routes/views';
 
 // Configure server
 const app = express();
@@ -24,28 +23,15 @@ app.get('*', (_, res: Response) => {
 });
 
 // Start the server
+console.log('Initializing database...');
 sequelize.sync({ force: true }).then(() => {
-  console.log('Database synced');
+  console.log('Database initialized!');
+  console.log('Initializing LND node API...');
+  return initLnApi();
+}).then(() => {
+  console.log('LND API initialized!');
+  console.log('Starting REST server...');
   app.listen(env.PORT, () => {
-    console.log(`REST server started on port ${env.PORT}`);
-  });
-
-  // Testing out
-  const expires = new Date(Date.now() + env.INVOICE_EXPIRE_MINS * 60 * 1000);
-  createInvoice({
-    description: `RUN LND Shirt (M)`,
-    tokens: env.SHIRT_COST,
-    expires_at: expires.toISOString(),
-    wss: [],
-  }).then(invoice => {
-    return Order.create({
-      pubkey: 'hello',
-      paymentRequest: invoice.request,
-      preimage: invoice.secret,
-      size: 'M',
-      expires,
-    });
-  }).then(order => {
-    // console.log(order);
+    console.log(`REST server started on port ${env.PORT}!`);
   });
 });

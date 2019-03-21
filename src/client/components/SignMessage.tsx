@@ -1,5 +1,5 @@
 import React from 'react';
-import { requestProvider } from 'webln/lib/client';
+import { requestProvider } from 'webln';
 import Loader from './Loader';
 import api, { NodeInfo } from '../lib/api';
 import { MESSAGE } from '../../server/constants';

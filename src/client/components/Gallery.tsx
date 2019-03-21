@@ -27,12 +27,11 @@ export default class Gallery extends React.Component<Props, State> {
         <div className="Gallery-main">
           <img className="Gallery-main-image" src={activeImage.image} />
         </div>
-        <div className="Gallery-thumbs">
+        <div className="Gallery-pager">
           {images.map(i => (
-            <img
+            <button
               key={i.thumb}
-              src={i.thumb}
-              className={`Gallery-thumbs-thumb ${i === activeImage ? 'is-active' : ''}`}
+              className={`Gallery-pager-button ${i === activeImage ? 'is-active' : ''}`}
               onClick={() => this.setState({ activeImage: i })}
             />
           ))}

@@ -9,15 +9,15 @@ import Home from './components/Home';
 import CreateOrder from './components/CreateOrder';
 
 const App: React.SFC<{}> = () => (
-  <Template>
-    <Router>
+  <Router>
+    <Template>
       <Switch>
         <Route path="/" exact component={Home} />
         <Route path="/order" exact component={CreateOrder} />
         <Route path="*" render={() => <h1>Sup</h1>} />
-      </Switch>
-    </Router>
-  </Template>
+      </Switch>  
+    </Template>
+  </Router>
 );
 
 render(<App />, document.getElementById('root'));

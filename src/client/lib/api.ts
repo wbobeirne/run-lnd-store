@@ -106,15 +106,17 @@ class API {
       headers,
       body,
     })
-    .then(async (res) => {
+    .then(async res => {
       if (!res.ok) {
+        let errMsg;
         try {
           const errBody = await res.json();
           if (!errBody.error) throw new Error();
-          throw new Error(errBody);
+          errMsg = errBody.error;
         } catch(err) {
           throw new Error(`${res.status}: ${res.statusText}`);
         }
+        throw new Error(errMsg);
       }
       return res.json();
     })

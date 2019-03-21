@@ -1,80 +1,49 @@
-import lnService from 'ln-service';
-import lnCreateInvoice from 'ln-service/createInvoice';
-import lnVerifyMessage from 'ln-service/verifyMessage';
-import lnGetNode from 'ln-service/getNode';
-import WebSocket from 'ws';
+import path from 'path';
+import createLnRpc, { LnRpc } from '@radar/lnrpc';
 import env from '../env';
 
-// Separate LND instances for separate needs. Invoice can't readonly and vice versa.
-const readonlyLnd = lnService.lightningDaemon({
-  socket: env.LND_GRPC_URL,
-  cert: env.LND_TLS_CERT,
-  macaroon: env.LND_READONLY_MACAROON,
-});
+let readonlyLnRpc: LnRpc;
+let invoiceLnRpc: LnRpc;
 
-const invoiceLnd = lnService.lightningDaemon({
-  socket: env.LND_GRPC_URL,
-  cert: env.LND_TLS_CERT,
-  macaroon: env.LND_INVOICE_MACAROON,
-});
+export async function initLnApi() {
+  const server = env.LND_GRPC_URL;
+  const tls = env.LND_TLS_CERT_PATH;
 
-// Create Invoice
-interface CreateInvoiceArgs {
-  description: string;
-  expires_at: string; // ISO 8601
-  tokens: string | number;
-  wss: WebSocket[];
-}
+  // Separate LN RPC instances for separate needs. Invoice can't readonly
+  // and readonly can't create invoices.
+  readonlyLnRpc = await createLnRpc({
+    server,
+    tls,
+    macaroon: env.LND_READONLY_MACAROON,
+  });
 
-interface CreateInvoiceResponse {
-  created_at: string; // ISO 8601
-  description: string;
-  id: string;
-  request: string;
-  secret: string;
-  tokens: string;
-  type: string;
-}
-
-export function createInvoice(args: CreateInvoiceArgs): Promise<CreateInvoiceResponse> {
-  return lnCreateInvoice({
-    ...args,
-    lnd: invoiceLnd,
-    log: console.log,
+  invoiceLnRpc = await createLnRpc({
+    server,
+    tls,
+    macaroon: env.LND_INVOICE_MACAROON,
   });
 }
 
-
-// Verify Message
-interface VerifyMessageArgs {
-  message: string;
-  signature: string;
+function checkInitialized() {
+  if (!invoiceLnRpc || !readonlyLnRpc) {
+    throw new Error('Must initialize ln-api before running functions');
+  }
 }
 
-interface VerifyMessageResponse {
-  signed_by: string;
+export function createInvoice(...args: Parameters<LnRpc["addInvoice"]>) {
+  checkInitialized();
+  return invoiceLnRpc.addInvoice(...args);
 }
 
-export function verifyMessage(args: VerifyMessageArgs): Promise<VerifyMessageResponse> {
-  return lnVerifyMessage({
-    ...args,
-    lnd: readonlyLnd,
-    log: console.log,
-  });
+export function verifyMessage(...args: Parameters<LnRpc["verifyMessage"]>) {
+  checkInitialized();
+  return readonlyLnRpc.verifyMessage(...args);
 }
 
-// Get node
-interface GetNodeResponse {
-  alias: string;
-  capacity: string;
-  channel_count: number;
-  color: string;
+export function getNode(pubKey: string) {
+  checkInitialized();
+  return readonlyLnRpc.getNodeInfo({ pubKey });
 }
 
-export function getNode(public_key: string): Promise<GetNodeResponse> {
-  return lnGetNode({
-    public_key,
-    lnd: readonlyLnd,
-    log: console.log,
-  });
-}
+// Get parameters from another function as args
+type Parameters<T> = T extends (... args: infer T) => any ? T : never; 

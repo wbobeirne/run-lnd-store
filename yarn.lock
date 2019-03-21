@@ -700,7 +700,7 @@
     lodash "^4.17.10"
     to-fast-properties "^2.0.0"
 
-"@grpc/proto-loader@0.4.0":
+"@grpc/proto-loader@0.4.0", "@grpc/proto-loader@^0.4.0":
   version "0.4.0"
   resolved "https://registry.yarnpkg.com/@grpc/proto-loader/-/proto-loader-0.4.0.tgz#a823a51eb2fde58369bef1deb5445fd808d70901"
   integrity sha512-Jm6o+75uWT7E6+lt8edg4J1F/9+BedOjaMgwE14pxS/AO43/0ZqK+rCLVVrXLoExwSAZvgvOD2B0ivy3Spsspw==
@@ -770,6 +770,17 @@
   version "1.1.0"
   resolved "https://registry.yarnpkg.com/@protobufjs/utf8/-/utf8-1.1.0.tgz#a777360b5b39a1a2e5106f8e858f2fd2d060c570"
   integrity sha1-p3c2C1s5oaLlEG+OhY8v0tBgxXA=
+
+"@radar/lnrpc@0.5.2-beta.2":
+  version "0.5.2-beta.2"
+  resolved "https://registry.yarnpkg.com/@radar/lnrpc/-/lnrpc-0.5.2-beta.2.tgz#3cc05f20b2edfd2ef85149bf8a2c3532441ebeda"
+  integrity sha512-uF2FQBesaJEZzaICDrncm3rsFscqN932NFP/bVQ0TV0F+z63wORbJ+ZTtvJZ1OwTAfywo3qwKFppTZxt0OSLvQ==
+  dependencies:
+    "@grpc/proto-loader" "^0.4.0"
+    "@types/google-protobuf" "^3.2.7"
+    grpc "^1.14.0-pre2"
+    pkg-dir "^2.0.0"
+    ts-protoc-gen "^0.8.0"
 
 "@sindresorhus/is@^0.7.0":
   version "0.7.0"
@@ -860,6 +871,11 @@
   version "1.0.6"
   resolved "https://registry.yarnpkg.com/@types/geojson/-/geojson-1.0.6.tgz#3e02972728c69248c2af08d60a48cbb8680fffdf"
   integrity sha512-Xqg/lIZMrUd0VRmSRbCAewtwGZiAk3mEUDvV4op1tGl+LvyPcb/MIOSxTl9z+9+J+R4/vpjiCAT4xeKzH9ji1w==
+
+"@types/google-protobuf@^3.2.7":
+  version "3.2.7"
+  resolved "https://registry.yarnpkg.com/@types/google-protobuf/-/google-protobuf-3.2.7.tgz#9576ed5dd62cdb1c9f952522028a03b7cb2b69b5"
+  integrity sha512-Pb9wl5qDEwfnJeeu6Zpn5Y+waLrKETStqLZXHMGCTbkNuBBudPy4qOGN6veamyeoUBwTm2knOVeP/FlHHhhmzA==
 
 "@types/history@*":
   version "4.7.2"
@@ -3197,6 +3213,11 @@ globule@^1.0.0:
     lodash "~4.17.10"
     minimatch "~3.0.2"
 
+google-protobuf@^3.6.1:
+  version "3.7.0"
+  resolved "https://registry.yarnpkg.com/google-protobuf/-/google-protobuf-3.7.0.tgz#5c7228b68d24a7c93706c1a44efdb8ee883cea43"
+  integrity sha512-QZwgOBPfvnAdnYA+tizEs9CbE42mMXFPGCmYAh0podfJbGPkBIEC6vR9gMSGxjaSB8t2GCGLhOHiX9OrseOWCA==
+
 got@^6.7.1:
   version "6.7.1"
   resolved "https://registry.yarnpkg.com/got/-/got-6.7.1.tgz#240cd05785a9a18e561dc1b44b41c763ef1e8db0"
@@ -3246,6 +3267,17 @@ grpc@1.18.0, grpc@^1.15.1:
   version "1.18.0"
   resolved "https://registry.yarnpkg.com/grpc/-/grpc-1.18.0.tgz#a550a464f787073f305c0a136ecc4b74fffbf94c"
   integrity sha512-M0K67Zhv2ZzCjrTbQvjWgYFPB929L+qAVnbNgXepbfO5kJxUYc30dP8m8vb+o8QdahLHAeYfIqRoIzZRcCB98Q==
+  dependencies:
+    lodash.camelcase "^4.3.0"
+    lodash.clone "^4.5.0"
+    nan "^2.0.0"
+    node-pre-gyp "^0.12.0"
+    protobufjs "^5.0.3"
+
+grpc@^1.14.0-pre2:
+  version "1.19.0"
+  resolved "https://registry.yarnpkg.com/grpc/-/grpc-1.19.0.tgz#129fb30923ea2fa7a9b2623f9e7930eda91a242f"
+  integrity sha512-xX+jZ1M3YXjngsRj/gTxB4EwM0WoWUr54DmyNq9xTeg1oSuVaTPD/PK9wnZKOJWTt1pkeFspXqwJPhddZNxHOA==
   dependencies:
     lodash.camelcase "^4.3.0"
     lodash.clone "^4.5.0"
@@ -6653,6 +6685,13 @@ ts-node@8.0.2:
     source-map-support "^0.5.6"
     yn "^3.0.0"
 
+ts-protoc-gen@^0.8.0:
+  version "0.8.0"
+  resolved "https://registry.yarnpkg.com/ts-protoc-gen/-/ts-protoc-gen-0.8.0.tgz#2a9a31ee8a4d4760c484f1d0c7199633afaa5e3e"
+  integrity sha512-LUFM4Jy3qMSVyRf5ql973cJjltS98MiCz8kPf1Rc9AC9BeLu0WJfoHLf0Tvx2cGH0jSK9BpA0o1tHQQfjeO47Q==
+  dependencies:
+    google-protobuf "^3.6.1"
+
 tslib@^1.9.0:
   version "1.9.3"
   resolved "https://registry.yarnpkg.com/tslib/-/tslib-1.9.3.tgz#d7e4dd79245d85428c4d7e4822a79917954ca286"
@@ -6693,10 +6732,10 @@ typeforce@^1.11.3, typeforce@^1.11.5:
   resolved "https://registry.yarnpkg.com/typeforce/-/typeforce-1.18.0.tgz#d7416a2c5845e085034d70fcc5b6cc4a90edbfdc"
   integrity sha512-7uc1O8h1M1g0rArakJdf0uLRSSgFcYexrVoKo+bzJd32gd4gDy2L/Z+8/FjPnU9ydY3pEnVPtr9FyscYY60K1g==
 
-typescript@3.3.1:
-  version "3.3.1"
-  resolved "https://registry.yarnpkg.com/typescript/-/typescript-3.3.1.tgz#6de14e1db4b8a006ac535e482c8ba018c55f750b"
-  integrity sha512-cTmIDFW7O0IHbn1DPYjkiebHxwtCMU+eTy30ZtJNBPF9j2O1ITu5XH2YnBeVRKWHqF+3JQwWJv0Q0aUgX8W7IA==
+typescript@3.3.4000:
+  version "3.3.4000"
+  resolved "https://registry.yarnpkg.com/typescript/-/typescript-3.3.4000.tgz#76b0f89cfdbf97827e1112d64f283f1151d6adf0"
+  integrity sha512-jjOcCZvpkl2+z7JFn0yBOoLQyLoIkNZAs/fYJkUG6VKy6zLPHJGfQJYFHzibB6GJaF/8QrcECtlQ5cpvRHSMEA==
 
 undefsafe@^2.0.2:
   version "2.0.2"
@@ -6961,10 +7000,10 @@ watchpack@^1.5.0:
     graceful-fs "^4.1.2"
     neo-async "^2.5.0"
 
-webln@0.1.0:
-  version "0.1.0"
-  resolved "https://registry.yarnpkg.com/webln/-/webln-0.1.0.tgz#2ba4287dfaab578e94045ceaa7a70cd6e1802b4a"
-  integrity sha512-EB2YOCobf7wXDGqIZ+fWizGSyKANsX4LMy08FhN4sRn4aQWx1vwDW9HuqWQylhPvLvKQUhhinMYisvbyNT0pMg==
+webln@0.2.0:
+  version "0.2.0"
+  resolved "https://registry.yarnpkg.com/webln/-/webln-0.2.0.tgz#841a19a315efb407dc065ab6827bd64e61051cdd"
+  integrity sha512-8fuN3k6Aif6HkAeKtvhnWHUdkOwZDf5igQc+jtOR3Id1x1q6/hklJqnixSOIARu1VUrhInLeVBTr1QdKatGlkw==
   dependencies:
     "@types/chrome" "0.0.74"
 

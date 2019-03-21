@@ -19,6 +19,7 @@ const env = {
   LND_INVOICE_MACAROON: process.env.LND_INVOICE_MACAROON as string,
   LND_READONLY_MACAROON: process.env.LND_READONLY_MACAROON as string,
   LND_TLS_CERT: process.env.LND_TLS_CERT as string,
+  LND_TLS_CERT_PATH: process.env.LND_TLS_CERT_PATH as string,
 };
 
 Object.entries(env).forEach(([key, value]) => {

@@ -1,4 +1,5 @@
 import React from 'react';
+import { Link } from 'react-router-dom';
 import './Template.scss';
 
 interface Props {
@@ -8,9 +9,9 @@ interface Props {
 const Template: React.SFC<Props> = ({ children }) => (
   <div className="Template">
     <div className="Template-header">
-      <div className="Header-logo">
+      <Link className="Template-header-logo" to="/">
         <img src="/client/images/run-lnd.svg" />
-      </div>
+      </Link>
       <div className="Header-plug">
         Brought to you by Joule
       </div>
