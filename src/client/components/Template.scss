@@ -1,4 +1,10 @@
+@import '../style/variables.scss';
+
 .Template {
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+
   &-header {
     display: flex;
     justify-content: space-between;
@@ -10,13 +16,36 @@
       width: 4rem;
       height: 4rem;
     }
+
+    &-plug a {
+      color: $red;
+      opacity: 0.8;
+
+      &:hover {
+        opacity: 1;
+      }
+    }
   }
 
   &-content {
+    flex-grow: 1;
     padding: 0 2rem 5rem;
   }
 
   &-footer {
-    padding: 3rem;
+    padding: 2rem;
+    line-height: 2;
+    font-size: 12px;
+    text-align: center;
+    color: rgba(#000, 0.4);
+
+    a {
+      color: $red;
+      opacity: 0.5;
+
+      &:hover {
+        opacity: 1;
+      }
+    }
   }
 }

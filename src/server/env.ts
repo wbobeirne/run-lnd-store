@@ -14,19 +14,22 @@ const env = {
     [SIZE.XL]: parseInt(process.env.SHIRT_STOCK_XL as string, 10),
   },
 
-  INVOICE_EXPIRE_MINS: parseInt(process.env.INVOICE_EXPIRE_MINS as string, 10),
+  INVOICE_EXPIRE_MINS: parseFloat(process.env.INVOICE_EXPIRE_MINS as string),
   LND_GRPC_URL: process.env.LND_GRPC_URL as string,
   LND_INVOICE_MACAROON: process.env.LND_INVOICE_MACAROON as string,
+  LND_INVOICE_MACAROON_PATH: process.env.LND_INVOICE_MACAROON_PATH as string,
   LND_READONLY_MACAROON: process.env.LND_READONLY_MACAROON as string,
+  LND_READONLY_MACAROON_PATH: process.env.LND_READONLY_MACAROON_PATH as string,
   LND_TLS_CERT: process.env.LND_TLS_CERT as string,
   LND_TLS_CERT_PATH: process.env.LND_TLS_CERT_PATH as string,
 };
 
-Object.entries(env).forEach(([key, value]) => {
-  if (!value) {
-    console.error(`Missing required environemnt key ${key}, exiting!`);
-    process.exit(1);
-  }
-});
+// TODO: Decide which are required.
+// Object.entries(env).forEach(([key, value]) => {
+//   if (!value) {
+//     console.error(`Missing required environemnt key ${key}, exiting!`);
+//     process.exit(1);
+//   }
+// });
 
 export default env;

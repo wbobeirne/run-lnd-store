@@ -96,7 +96,7 @@ export default class SignMessage extends React.Component<Props, State> {
           </div>
           {submitError && (
             <div className="notification is-danger">
-              <button className="delete" />
+              <button className="delete" onClick={this.closeError} type="button" />
               {submitError}
             </div>
           )}
@@ -138,7 +138,6 @@ export default class SignMessage extends React.Component<Props, State> {
     this.setState({ isWeblnSigning: true });
     try {
       const res = await webln.signMessage(MESSAGE);
-      console.log(res);
       this.setState({
         signature: (res as any).signature,
         isWeblnSigning: false,
@@ -165,7 +164,7 @@ export default class SignMessage extends React.Component<Props, State> {
   };
 
   private submit = async (ev?: React.FormEvent<HTMLFormElement>) => {
-    if (ev) ev.preventDefault;
+    if (ev) ev.preventDefault();
     this.setState({ isSubmitting: true });
 
     try {
@@ -178,6 +177,10 @@ export default class SignMessage extends React.Component<Props, State> {
         submitError: err.message || err.toString(),
       });
     }
+  };
+
+  private closeError = () => {
+    this.setState({ submitError: '' });
   };
 
   private reset = () => {

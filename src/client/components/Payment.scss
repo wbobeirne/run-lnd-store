@@ -1,0 +1,13 @@
+.Payment {
+  &-success {
+    text-align: center;
+
+    &-text {
+      margin-bottom: 1.5rem;
+    }
+
+    &-continue {
+      margin-bottom: 0.5rem;
+    }
+  }
+}

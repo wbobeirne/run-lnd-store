@@ -1,21 +1,28 @@
-import { Table, Column, Model } from 'sequelize-typescript';
+import { Op } from 'sequelize';
+import { Table, Column, Model, Default } from 'sequelize-typescript';
 import { SIZE } from '../../constants';
 import env from '../../env';
 
 @Table({ timestamps: true, paranoid: true })
 export class Order extends Model<Order> {
   // Lightning invoice info (All required)
-  @Column({ allowNull: false, unique: true })
+  @Column({ allowNull: false })
   pubkey!: string;
 
-  @Column({ allowNull: false })
+  @Column({ allowNull: false, unique: true })
   paymentRequest!: string;
 
-  @Column({ allowNull: false })
-  preimage!: string;
+  @Column({ allowNull: false, unique: true })
+  rHash!: string;
+
+  @Column({ allowNull: false, unique: true })
+  addIndex!: number;
 
   @Column({ allowNull: false })
   expires!: Date;
+
+  @Column({ allowNull: false })
+  hasPaid!: boolean;
 
   // Order details (All except size optional, come after invoice creation)
   @Column({ allowNull: false })
@@ -46,28 +53,30 @@ export class Order extends Model<Order> {
   country!: string;
 
   // Helper methods
-  isPending() {
-    return !this.email;
+  isExpired() {
+    return this.expires.getTime() <= Date.now();
   }
 
   serialize() {
     const json = this.toJSON();
     delete json.deletedAt;
     delete json.updatedAt;
-    delete json.preimage;
+    delete json.addIndex;
     return json;
   }
 
-  // Static functions
-  static getOrderForPubkey(pubkey: string) {
+  static async getActiveOrderForPubkey(pubkey: string) {
     return Order.findOne({
       where: {
         pubkey,
-        expires: {
-          $lt: new Date(),
-        },
+        [Op.or]: {
+          expires: {
+            [Op.gt]: new Date(),
+          },
+          hasPaid: true,
+        }
       },
-    })
+    });
   }
 
   static async getStock() {
@@ -103,15 +112,18 @@ export class Order extends Model<Order> {
     // Reduce stock for each order. If it's pending, mark pending.
     const orders = await Order.findAll({
       where: {
-        expires: {
-          $lt: new Date(),
+        [Op.or]: {
+          expires: {
+            [Op.gt]: new Date(),
+          },
+          hasPaid: true,
         },
       },
     });
     orders.forEach(o => {
       const size = o.size as SIZE;
       stocks[size].available = stocks[size].available - 1;
-      stocks[size].pending = stocks[size].pending || o.isPending();
+      stocks[size].pending = stocks[size].pending || !o.hasPaid;
     });
 
     return stocks;

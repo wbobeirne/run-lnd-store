@@ -5,7 +5,7 @@ export const sequelize =  new Sequelize({
   url: env.DATABASE_URL,
   modelPaths: [__dirname + '/models'],
   operatorsAliases: false,
-  logging: false,
+  logging: true,
 });
 
 export default sequelize;

@@ -33,6 +33,7 @@ export interface Order {
   id: number;
   pubkey: string;
   paymentRequest: string;
+  hasPaid: string;
   createdAt: string;
   expires: string;
   name: string | null;
@@ -79,6 +80,11 @@ class API {
         throw new Error('Message signature was invalid');
       }
     });
+  }
+
+  subscribeToOrder(id: string | number) {
+    const ws = location.protocol === 'https:' ? 'wss' : 'ws';
+    return new WebSocket(`${ws}://${location.host}${this.url}/order/${id}/subscribe`);
   }
 
   // Internal fetch function

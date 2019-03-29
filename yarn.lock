@@ -771,14 +771,14 @@
   resolved "https://registry.yarnpkg.com/@protobufjs/utf8/-/utf8-1.1.0.tgz#a777360b5b39a1a2e5106f8e858f2fd2d060c570"
   integrity sha1-p3c2C1s5oaLlEG+OhY8v0tBgxXA=
 
-"@radar/lnrpc@0.5.2-beta.2":
-  version "0.5.2-beta.2"
-  resolved "https://registry.yarnpkg.com/@radar/lnrpc/-/lnrpc-0.5.2-beta.2.tgz#3cc05f20b2edfd2ef85149bf8a2c3532441ebeda"
-  integrity sha512-uF2FQBesaJEZzaICDrncm3rsFscqN932NFP/bVQ0TV0F+z63wORbJ+ZTtvJZ1OwTAfywo3qwKFppTZxt0OSLvQ==
+"@radar/lnrpc@0.5.2-beta.3":
+  version "0.5.2-beta.3"
+  resolved "https://registry.yarnpkg.com/@radar/lnrpc/-/lnrpc-0.5.2-beta.3.tgz#3cfef42e8e7ccd87c504f7ffd49c3397e8df57b6"
+  integrity sha512-X1EgmDNKDZyblPAZfYe/qfvHO366cdkmUo5yppUAN7F6EkCi3TfvSjtnybqqpkVzIUyMmdtLhk/bW86xS86xzw==
   dependencies:
     "@grpc/proto-loader" "^0.4.0"
     "@types/google-protobuf" "^3.2.7"
-    grpc "^1.14.0-pre2"
+    grpc "^1.19.0"
     pkg-dir "^2.0.0"
     ts-protoc-gen "^0.8.0"
 
@@ -846,7 +846,16 @@
     "@types/node" "*"
     "@types/range-parser" "*"
 
-"@types/express@4.16.1":
+"@types/express-ws@3.0.0":
+  version "3.0.0"
+  resolved "https://registry.yarnpkg.com/@types/express-ws/-/express-ws-3.0.0.tgz#89674edba2e9141916fc4d4d30fbd4f810e6b80b"
+  integrity sha512-GxsWec7Vp6h7sJuK0PwnZHeXNZnOwQn8kHAbCfvii66it5jXHTWzSg5cgHVtESwJfBLOe9SJ5wmM7C6gsDoyQw==
+  dependencies:
+    "@types/express" "*"
+    "@types/express-serve-static-core" "*"
+    "@types/ws" "*"
+
+"@types/express@*", "@types/express@4.16.1":
   version "4.16.1"
   resolved "https://registry.yarnpkg.com/@types/express/-/express-4.16.1.tgz#d756bd1a85c34d87eaf44c888bad27ba8a4b7cf0"
   integrity sha512-V0clmJow23WeyblmACoxbHBu2JKlE5TiIme6Lem14FnPW9gsttyHtk6wq7njcdIWH1njAaFgR8gW09lgY98gQg==
@@ -1003,7 +1012,7 @@
   resolved "https://registry.yarnpkg.com/@types/validator/-/validator-10.9.0.tgz#747f36c7ad281da769458ab4c3b8837aee1578b6"
   integrity sha512-mf0VpXk+NoTmkUmuJCsdwBYxjYZW41amCSzd4t/fABMKl+qGMViwFP0pR7ukFdZRXWI1LIkca3VIbXVBmWZ4kQ==
 
-"@types/ws@6.0.1":
+"@types/ws@*", "@types/ws@6.0.1":
   version "6.0.1"
   resolved "https://registry.yarnpkg.com/@types/ws/-/ws-6.0.1.tgz#ca7a3f3756aa12f62a0a62145ed14c6db25d5a28"
   integrity sha512-EzH8k1gyZ4xih/MaZTXwT2xOkPiIMSrhQ9b8wrlX88L0T02eYsddatQlwVFlEPyEqV0ChpdpNnE51QPH6NVT4Q==
@@ -2768,6 +2777,13 @@ express-basic-auth@1.1.6:
   dependencies:
     basic-auth "^2.0.1"
 
+express-ws@4.0.0:
+  version "4.0.0"
+  resolved "https://registry.yarnpkg.com/express-ws/-/express-ws-4.0.0.tgz#dabd8dc974516418902a41fe6e30ed949b4d36c4"
+  integrity sha512-KEyUw8AwRET2iFjFsI1EJQrJ/fHeGiJtgpYgEWG3yDv4l/To/m3a2GaYfeGyB3lsWdvbesjF5XCMx+SVBgAAYw==
+  dependencies:
+    ws "^5.2.0"
+
 express@4.16.4:
   version "4.16.4"
   resolved "https://registry.yarnpkg.com/express/-/express-4.16.4.tgz#fddef61926109e24c515ea97fd2f1bdbf62df12e"
@@ -3274,7 +3290,7 @@ grpc@1.18.0, grpc@^1.15.1:
     node-pre-gyp "^0.12.0"
     protobufjs "^5.0.3"
 
-grpc@^1.14.0-pre2:
+grpc@^1.19.0:
   version "1.19.0"
   resolved "https://registry.yarnpkg.com/grpc/-/grpc-1.19.0.tgz#129fb30923ea2fa7a9b2623f9e7930eda91a242f"
   integrity sha512-xX+jZ1M3YXjngsRj/gTxB4EwM0WoWUr54DmyNq9xTeg1oSuVaTPD/PK9wnZKOJWTt1pkeFspXqwJPhddZNxHOA==
@@ -7147,6 +7163,13 @@ ws@6.1.3:
   version "6.1.3"
   resolved "https://registry.yarnpkg.com/ws/-/ws-6.1.3.tgz#d2d2e5f0e3c700ef2de89080ebc0ac6e1bf3a72d"
   integrity sha512-tbSxiT+qJI223AP4iLfQbkbxkwdFcneYinM2+x46Gx2wgvbaOMO36czfdfVUBRTHvzAMRhDd98sA5d/BuWbQdg==
+  dependencies:
+    async-limiter "~1.0.0"
+
+ws@^5.2.0:
+  version "5.2.2"
+  resolved "https://registry.yarnpkg.com/ws/-/ws-5.2.2.tgz#dffef14866b8e8dc9133582514d1befaf96e980f"
+  integrity sha512-jaHFD6PFv6UgoIVda6qZllptQsMlDEJkTQcybzzXDYM1XO9Y8em691FGMPmM46WGyLU4z9KMgQN+qrux/nhlHA==
   dependencies:
     async-limiter "~1.0.0"
 
