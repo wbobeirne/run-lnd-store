@@ -19,7 +19,7 @@ const OrderSuccess: React.SFC<Props> = ({ order }) => (
     <p className="OrderSuccess-text">
       Your order has been successfully completed. Expect to receive a tracking
       number in the next week. You will <strong>not</strong> receive a
-      confirmation email.
+      confirmation email, so you may want to screenshot this for your records.
     </p>
     <OrderSummary order={order} />
     <p className="OrderSuccess-text">

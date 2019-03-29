@@ -11,7 +11,7 @@ async function verify(msg: string, signature: string, res: Response) {
   try {
     const verification = await verifyMessage({ msg, signature });
     if (!verification.valid) {
-      res.status(400).json({ error: 'Invalid signature, make sure you copied it correctly and you signed using a mainnet node.' });
+      res.status(400).json({ error: 'Could not verify your pubkey from signature. Make sure you’re on a mainnet node, and have at least one public channel open, and try again.' });
       return false;
     }
     if (!verification.pubkey) {
@@ -39,7 +39,7 @@ router.get('/node', asyncHandler(async (req: Request, res: Response) => {
     const { node } = await getNode(pubkey);
     res.json({ data: node });
   } catch(err) {
-    res.status(400).json({ error: 'Could not find your node on the network, add our node as a peer and try again' });
+    res.status(400).json({ error: 'Could not find your node on the network, make sure you have at least one public channel and try again.' });
   }
 }));
 
@@ -63,7 +63,7 @@ router.post('/verify', asyncHandler(async (req: Request, res: Response) => {
     });
   } catch(err) {
     console.error(err);
-    res.status(400).json({ error: 'Could not find your node on the network, add our node as a peer and try again' });
+    res.status(400).json({ error: 'Could not find your node on the network, make sure you have at least one public channel and try again.' });
   }
 }));
 

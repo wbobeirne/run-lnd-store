@@ -95,9 +95,10 @@ export default class SignMessage extends React.Component<Props, State> {
             </div>
           </div>
           {submitError && (
-            <div className="notification is-danger">
-              <button className="delete" onClick={this.closeError} type="button" />
-              {submitError}
+            <div className="message is-danger">
+              <div className="message-body">
+                {submitError}
+              </div>
             </div>
           )}
           <div className="buttons">
@@ -177,10 +178,6 @@ export default class SignMessage extends React.Component<Props, State> {
         submitError: err.message || err.toString(),
       });
     }
-  };
-
-  private closeError = () => {
-    this.setState({ submitError: '' });
   };
 
   private reset = () => {

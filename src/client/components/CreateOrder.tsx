@@ -117,8 +117,11 @@ class CreateOrder extends React.PureComponent<RouteComponentProps, State> {
     });
   };
 
-  private onComplete = () => {
-    this.setState({ isFinished: true });
+  private onComplete = (order: Order) => {
+    this.setState({
+      order,
+      isFinished: true,
+    });
   };
 }
 

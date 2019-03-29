@@ -20,7 +20,7 @@ interface FieldProps {
   help?: string;
   placeholder?: string;
   required?: boolean;
-  inputProps?: any;
+  pattern?: string;
 }
 
 export default class ShippingInfo extends React.PureComponent<Props, State> {
@@ -71,16 +71,17 @@ export default class ShippingInfo extends React.PureComponent<Props, State> {
         <div className="columns">
           <div className="column">
             {this.renderField({
-              name: 'country',
-              label: 'Country',
+              name: 'city',
+              label: 'City',
               required: true,
             })}
           </div>
           <div className="column">
             {this.renderField({
-              name: 'city',
-              label: 'City',
+              name: 'zip',
+              label: 'Zip Code',
               required: true,
+              pattern: '[0-9]+',
             })}
           </div>
         </div>
@@ -94,8 +95,8 @@ export default class ShippingInfo extends React.PureComponent<Props, State> {
           </div>
           <div className="column">
             {this.renderField({
-              name: 'zip',
-              label: 'Zip Code',
+              name: 'country',
+              label: 'Country',
               required: true,
             })}
           </div>
@@ -141,12 +142,12 @@ export default class ShippingInfo extends React.PureComponent<Props, State> {
         {props.label && <label className="label">{props.label}</label>}
         <div className="control">
           <input
-            {...(props.inputProps || {})}
             name={props.name}
             className="input"
             placeholder={props.placeholder}
-            value={this.state.form[props.name]}
+            value={this.state.form[props.name] as string}
             required={props.required}
+            pattern={props.pattern}
             onChange={this.handleFieldChange}
           />
         </div>

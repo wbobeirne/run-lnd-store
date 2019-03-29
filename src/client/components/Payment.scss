@@ -1,4 +1,47 @@
 .Payment {
+  width: 100%;
+
+  &-order {
+    display: flex;
+    align-items: center;
+
+    &-qr {
+      display: block;
+      padding-right: 1rem;
+      filter: grayscale(1);
+      transition: filter 100ms ease;
+
+      &:hover {
+        filter: grayscale(0.2);
+      }
+
+      canvas {
+        display: block;
+        margin-bottom: 0.25rem;
+      }
+
+      &-hint {
+        display: block;
+        text-align: center;
+        font-size: 11px;
+        opacity: 0.7;
+      }
+    }
+
+    &-invoice {
+      flex: 1;
+
+      .textarea {
+        margin-bottom: 0.5rem;
+      }
+
+      .button {
+        width: 100%;
+        text-align: center;
+      }
+    }
+  }
+
   &-success {
     text-align: center;
 

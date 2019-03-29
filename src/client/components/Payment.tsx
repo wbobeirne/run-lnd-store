@@ -108,21 +108,24 @@ export default class Payment extends React.PureComponent<Props, State> {
         content = (
           <div className="Payment-order">
             <a href={`lightning:${order.paymentRequest}`} className="Payment-order-qr">
-              <QRCode value={order.paymentRequest.toUpperCase()} />
-              <small className="Payment-order-qr-hint">
-                Click to open in wallet
-              </small>
+              <QRCode value={order.paymentRequest.toUpperCase()} fgColor="#F70000" size={200} />
             </a>
-            <input className="input" readOnly value={order.paymentRequest} />
+            <div className="Payment-order-invoice">
+              <textarea className="textarea" readOnly value={order.paymentRequest} rows={5} />
+              <a href={`lightning:${order.paymentRequest}`} className="button is-primary is-medium">
+                Open in Wallet ⚡
+              </a>
+            </div>
           </div>
         );
       }
     } else if (getOrderError) {
       content = (
         <>
-          <div className="notification is-danger">
-            <button className="delete" onClick={this.closeError} />
-            {getOrderError}
+          <div className="message is-danger">
+            <div className="message-body">
+              {getOrderError}
+            </div>
           </div>
           <button className="button is-primary" onClick={this.getOrder}>
             Try again
@@ -212,9 +215,5 @@ export default class Payment extends React.PureComponent<Props, State> {
         this.setState({ getOrderError: 'Something went wrong while waiting for payment' });
       }
     });
-  };
-
-  private closeError = () => {
-    this.setState({ getOrderError: '' });
   };
 }
