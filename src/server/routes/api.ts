@@ -117,6 +117,28 @@ router.get('/order/:id', async (req: Request, res: Response) => {
 });
 
 
+router.put('/order/:id', async (req: Request, res: Response) => {
+  const order = await Order.findByPk(req.params.id);
+  if (!order) {
+    return res.status(404).json({ error: 'No order found' });
+  }
+
+  try {
+    const updateKeys: Array<keyof Order> = ['address1', 'address2', 'city', 'country', 'email', 'name', 'state', 'zip'];
+    updateKeys.forEach(key => {
+      if (req.body[key] === null || req.body[key] === undefined) {
+        return;
+      }
+      order[key] = req.body[key];
+    });
+    await order.save();
+    res.json({ data: order.serialize() });
+  } catch(err) {
+    res.status(400).json({ error: 'Invalid information for order, check the form and try again' });
+  }
+});
+
+
 router.ws('/order/:id/subscribe', async (ws, req) => {
   const order = await Order.findByPk(req.params.id);
   const sendAndClose = (d: object) => {

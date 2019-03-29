@@ -1,0 +1,21 @@
+.OrderSummary {
+  text-align: left;
+  margin: 1.5rem auto;
+  padding: 0.1rem 0;
+  max-width: 360px;
+  border: 1px solid rgba(#000, 0.15);
+  border-radius: 4px;
+
+  &-detail {
+    display: flex;
+    padding: 0.4rem;
+
+    &-label {
+      width: 95px;
+      flex-shrink: 0;
+      font-weight: bold;
+      text-align: right;
+      padding-right: 1rem;
+    }
+  }
+}

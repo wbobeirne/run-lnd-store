@@ -1,9 +1,11 @@
 import React from 'react';
+import moment from 'moment';
 import QRCode from 'qrcode.react';
 import { requestProvider } from 'webln';
 import Loader from './Loader';
+import OrderSummary from './OrderSummary';
 import api, { Order } from '../lib/api';
-import { MESSAGE, SIZE } from '../../server/constants';
+import { MESSAGE, SIZE, SIZE_LABELS } from '../../server/constants';
 import './Payment.scss';
 
 interface Props {
@@ -43,22 +45,20 @@ export default class Payment extends React.PureComponent<Props, State> {
     const { order, isGettingOrder, isWeblnPaying, getOrderError, hasPaid, hasExpired, existingOrder } = this.state;
 
     let content;
-    if (hasPaid) {
+    if (hasPaid || (order && order.hasPaid && !order.email)) {
       content = (
-        <>
-          <div className="Payment-success">
-            <h3 className="title">Success!</h3>
-            <p className="Payment-success-text">
-              Your payment has been received
-            </p>
-            <button
-              className="Payment-success-continue button is-primary is-medium"
-              onClick={() => this.props.onPayment(order as Order)}
-            >
-              Continue to shipping info
-            </button>
-          </div>
-        </>
+        <div className="Payment-success">
+          <h3 className="title">Success!</h3>
+          <p className="Payment-success-text">
+            Your payment has been received
+          </p>
+          <button
+            className="Payment-success-continue button is-primary is-medium"
+            onClick={() => this.props.onPayment(order as Order)}
+          >
+            Continue to shipping info
+          </button>
+        </div>
       )
     } else if (hasExpired) {
       content = (
@@ -78,17 +78,45 @@ export default class Payment extends React.PureComponent<Props, State> {
     } else if (isWeblnPaying) {
       content = <Loader message="Sending payment with WebLN..." />
     } else if (order) {
-      content = (
-        <div className="Payment-order">
-          <a href={`lightning:${order.paymentRequest}`} className="Payment-order-qr">
-            <QRCode value={order.paymentRequest.toUpperCase()} />
-            <small className="Payment-order-qr-hint">
-              Click to open in wallet
-            </small>
-          </a>
-          <input className="input" readOnly value={order.paymentRequest} />
-        </div>
-      );
+      if (order.hasPaid && order.email) {
+        const email = process.env.CONTACT_EMAIL;
+        const twitter = process.env.CONTACT_TWITTER;
+        content = (
+          <div className="Payment-success">
+            <h3 className="title">You’ve already ordered</h3>
+            <p className="Payment-success-text">
+              You completed an order for a shirt on{' '}
+              {new Date(order.createdAt).toLocaleString()}.
+            </p>
+            <OrderSummary order={order} />
+            <p className="Payment-success-text">
+              If you have questions or need help with your order, please send an email to{' '}
+              <a href={`mailto:${email}`} target="blank">{email}</a>
+              {' '}or reach out to{' '}
+              <a href={`https://twitter.com/${twitter}`} target="blank">@{twitter}</a>
+              {' '}on Twitter.
+            </p>
+            <a
+              className="Payment-success-continue button is-primary is-medium"
+              href="/"
+            >
+              Return home
+            </a>
+          </div>
+        );
+      } else {
+        content = (
+          <div className="Payment-order">
+            <a href={`lightning:${order.paymentRequest}`} className="Payment-order-qr">
+              <QRCode value={order.paymentRequest.toUpperCase()} />
+              <small className="Payment-order-qr-hint">
+                Click to open in wallet
+              </small>
+            </a>
+            <input className="input" readOnly value={order.paymentRequest} />
+          </div>
+        );
+      }
     } else if (getOrderError) {
       content = (
         <>
@@ -122,12 +150,7 @@ export default class Payment extends React.PureComponent<Props, State> {
         order,
         isGettingOrder: false,
       }, () => {
-        if (order.hasPaid) {
-          this.setState({
-            hasPaid: true,
-            existingOrder: true,
-          });
-        } else {
+        if (!order.hasPaid) {
           this.subscribeToOrder(order);
           this.weblnPay();
         }

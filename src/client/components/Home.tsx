@@ -41,7 +41,7 @@ export default class Home extends React.PureComponent<{}> {
                 Instructions will be provided during checkout.
               </p>
               <p>
-                So what're you waiting for? Pick a size and go!
+                So what're you waiting for? Pick a size and go! (Limit 1 per node.)
               </p>
 
               <h3 className="title">Sizing</h3>

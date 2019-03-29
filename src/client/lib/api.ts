@@ -34,7 +34,7 @@ export interface Order {
   pubkey: string;
   paymentRequest: string;
   hasPaid: string;
-  createdAt: string;
+  size: SIZE;
   expires: string;
   name: string | null;
   email: string | null;
@@ -44,6 +44,7 @@ export interface Order {
   state: string | null;
   zip: string | null;
   country: string | null;
+  createdAt: string;
 }
 
 export type Stock = { [key in SIZE]: StockInfo };
@@ -64,8 +65,16 @@ class API {
     return this.request<NodeInfo>('GET', '/node', { pubkey });
   }
 
+  getOrder(id: string | number) {
+    return this.request<Order>('GET', `/order/${id}`);
+  }
+
   createOrGetOrder(args: CreateOrGetOrderArgs) {
     return this.request<Order>('POST', '/order', args);
+  }
+
+  updateOrder(id: string | number, args: Partial<Order>) {
+    return this.request<Order>('PUT', `/order/${id}`, args);
   }
 
   verifySignature(message: string, signature: string) {
@@ -98,7 +107,7 @@ class API {
     const headers = new Headers();
     headers.append('Accept', 'application/json');
 
-    if (method === 'POST') {
+    if (method === 'POST' || method === 'PUT') {
       body = JSON.stringify(args);
       headers.append('Content-Type', 'application/json');
     }

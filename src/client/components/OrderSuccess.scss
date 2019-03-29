@@ -1,0 +1,13 @@
+@import '../style/variables.scss';
+
+.OrderSuccess {
+  text-align: center;
+
+  &-icon {
+    display: block;
+    margin: 0 auto 2rem;
+    width: 6rem;
+    height: 6rem;
+    fill: $green;
+  }
+}

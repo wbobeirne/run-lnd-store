@@ -14,6 +14,7 @@ const App: React.SFC<{}> = () => (
       <Switch>
         <Route path="/" exact component={Home} />
         <Route path="/order" exact component={CreateOrder} />
+        <Route path="/order/:id" render={() => 'Hello'} />
         <Route path="*" render={() => <h1>Sup</h1>} />
       </Switch>  
     </Template>
