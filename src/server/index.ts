@@ -2,9 +2,10 @@ import express, { Response } from 'express';
 import expressWs from 'express-ws';
 import bodyParser from 'body-parser';
 import path from 'path';
+import enforce from 'express-sslify';
 import env from './env';
 import { sequelize } from './db';
-import { initLnApi, createInvoice } from './lib/ln-api';
+import { initLnApi } from './lib/ln-api';
 
 // Configure server
 const app = express();
@@ -15,6 +16,10 @@ app.set('view engine', 'ejs');
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use('/client', express.static(path.join(__dirname, 'client')));
+
+if (process.env.NODE_ENV === 'production') {
+  app.use(enforce.HTTPS({ trustProtoHeader: true }));
+}
 
 // Routes
 const apiRouter = require('./routes/api').default;
@@ -36,14 +41,4 @@ sequelize.sync({ force: false }).then(() => {
   app.listen(env.PORT, () => {
     console.log(`REST server started on port ${env.PORT}!`);
   });
-
-  // Sample order
-  // const expiry = env.INVOICE_EXPIRE_MINS * 60;
-  // createInvoice({
-  //   memo: `RUN LND Shirt (M)`,
-  //   value: env.SHIRT_COST.toString(),
-  //   expiry: expiry.toString(),
-  // })
-  // .then(res => console.log(res))
-  // .catch(err => console.log('oh shit', err));
 });

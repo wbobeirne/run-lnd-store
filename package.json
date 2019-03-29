@@ -10,6 +10,7 @@
     "build": "npm run build:server && npm run build:client",
     "build:server": "tsc",
     "build:client": "webpack --production",
+    "heroku-postbuild": "yarn build",
     "start": "node build/index.js"
   },
   "dependencies": {
@@ -32,6 +33,7 @@
     "ejs": "2.6.1",
     "express": "4.16.4",
     "express-async-handler": "1.1.4",
+    "express-sslify": "1.2.0",
     "express-ws": "4.0.0",
     "file-loader": "3.0.1",
     "ln-service": "33.1.0",
