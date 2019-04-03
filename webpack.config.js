@@ -1,7 +1,10 @@
 const path = require('path');
+const dotenv = require('dotenv');
+const webpack = require('webpack');
 const MiniCssExtractPlugin = require('mini-css-extract-plugin');
 const CopyWebpackPlugin = require('copy-webpack-plugin');
-const Dotenv = require('dotenv-webpack');
+
+dotenv.config();
 
 const src = path.join(__dirname, 'src/client');
 const build = path.join(__dirname, 'build/client');
@@ -45,7 +48,13 @@ module.exports = {
     extensions: ['.ts', '.tsx', '.js', '.jsx', '.json'],
   },
   plugins: [
-    new Dotenv(),
+    new webpack.DefinePlugin({
+      'process.env': {
+        SHIRT_COST: JSON.stringify(process.env.SHIRT_COST),
+        CONTACT_TWITTER: JSON.stringify(process.env.CONTACT_TWITTER),
+        CONTACT_EMAIL: JSON.stringify(process.env.CONTACT_EMAIL),
+      },
+    }),
     new MiniCssExtractPlugin({ filename: 'style.css' }),
     new CopyWebpackPlugin([{
       from: path.join(src, 'images'),
