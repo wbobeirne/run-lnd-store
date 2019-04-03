@@ -156,8 +156,6 @@ router.ws('/order/:id/subscribe', async (ws, req) => {
   }
 
   // Early returns if the database has info
-  console.log(order.expires.toLocaleString());
-  console.log(new Date().toLocaleString());
   if (order.hasPaid) {
     return sendAndClose({ success: true });
   }
@@ -166,7 +164,6 @@ router.ws('/order/:id/subscribe', async (ws, req) => {
   }
 
   // Open up stream with invoice to find out when they pay
-  console.log('Streamin');
   const stream = getInvoiceStream();
   let expiresTimeout: NodeJS.Timeout;
   stream.on('data', chunk => {
