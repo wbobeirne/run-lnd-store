@@ -12,7 +12,12 @@ const tsLoader = {
   test: /\.tsx?$/,
   loader: [
     'babel-loader',
-    'ts-loader',
+    {
+      loader: 'ts-loader',
+      options: {
+        configFile: path.join(src, 'tsconfig.json'),
+      },
+    },
   ],
 };
 
