@@ -33,11 +33,22 @@
   }
 
   &-footer {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
     padding: 2rem;
     line-height: 2;
     font-size: 12px;
     text-align: center;
     color: rgba(#000, 0.4);
+
+    &-left {
+      text-align: left;
+    }
+
+    &-right {
+      text-align: right;
+    }
 
     a {
       color: $red;
@@ -45,6 +56,25 @@
 
       &:hover {
         opacity: 1;
+      }
+    }
+
+    .input {
+      font-family: 'Lucida Console', Monaco, monospace;
+      direction: rtl;
+      opacity: 0.7;
+
+      &:hover {
+        opacity: 1;
+      }
+    }
+
+    @media (max-width: 620px) {
+      flex-direction: column;
+
+      &-left,
+      &-right {
+        text-align: center;
       }
     }
   }

@@ -22,14 +22,7 @@ const env = {
   LND_READONLY_MACAROON_PATH: process.env.LND_READONLY_MACAROON_PATH as string,
   LND_TLS_CERT: process.env.LND_TLS_CERT as string,
   LND_TLS_CERT_PATH: process.env.LND_TLS_CERT_PATH as string,
+  LND_CONNECTION_STRING: process.env.LND_CONNECTION_STRING as string,
 };
-
-// TODO: Decide which are required.
-// Object.entries(env).forEach(([key, value]) => {
-//   if (!value) {
-//     console.error(`Missing required environemnt key ${key}, exiting!`);
-//     process.exit(1);
-//   }
-// });
 
 export default env;
