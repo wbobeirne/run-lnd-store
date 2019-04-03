@@ -5,7 +5,6 @@ const Dotenv = require('dotenv-webpack');
 
 const src = path.join(__dirname, 'src/client');
 const build = path.join(__dirname, 'build/client');
-const isProd = process.env.NODE_ENV === 'production';
 
 // Shared configs
 const tsLoader = {
@@ -34,7 +33,6 @@ const scssLoader = {
 module.exports = {
   name: 'client',
   target: 'web',
-  mode: isProd ? 'production' : 'development',
   entry: path.join(src, 'index.tsx'),
   output: {
     path: build,
