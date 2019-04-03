@@ -1020,11 +1020,6 @@
     "@types/events" "*"
     "@types/node" "*"
 
-"@types/zepto@1.0.30":
-  version "1.0.30"
-  resolved "https://registry.yarnpkg.com/@types/zepto/-/zepto-1.0.30.tgz#067613ca8c1b61ce464125d3d92df9dba08368d8"
-  integrity sha512-uAW6pKvJJz9xI/j7DTQkVMAcL1upYVs6WOTI34SYDMxkpf9SMczdXodPIJk0fF8C2IJy/o0vk0PmrrlfSmJE9w==
-
 "@webassemblyjs/ast@1.7.11":
   version "1.7.11"
   resolved "https://registry.yarnpkg.com/@webassemblyjs/ast/-/ast-1.7.11.tgz#b988582cafbb2b095e8b556526f30c90d057cace"
