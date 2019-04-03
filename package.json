@@ -54,6 +54,7 @@
     "sequelize": "4.42.0",
     "sequelize-typescript": "0.6.7",
     "style-loader": "0.23.1",
+    "terser": "3.17.0",
     "ts-loader": "5.3.3",
     "typescript": "3.3.4000",
     "webln": "0.2.0",
@@ -76,5 +77,8 @@
     "concurrently": "4.1.0",
     "nodemon": "1.18.9",
     "ts-node": "8.0.2"
+  },
+  "resolutions": {
+    "terser": "3.17.0"
   }
 }
