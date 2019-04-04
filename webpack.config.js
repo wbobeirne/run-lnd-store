@@ -53,6 +53,7 @@ module.exports = {
         SHIRT_COST: JSON.stringify(process.env.SHIRT_COST),
         CONTACT_TWITTER: JSON.stringify(process.env.CONTACT_TWITTER),
         CONTACT_EMAIL: JSON.stringify(process.env.CONTACT_EMAIL),
+        LND_CONNECTION_STRING: JSON.stringify(process.env.LND_CONNECTION_STRING),
       },
     }),
     new MiniCssExtractPlugin({ filename: 'style.css' }),

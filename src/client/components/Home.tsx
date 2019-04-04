@@ -6,6 +6,12 @@ import './Home.scss';
 export default class Home extends React.PureComponent<{}> {
   render() {
     const images = [{
+      image: '/client/images/shirt-dm.jpg',
+      thumb: '/client/images/shirt-dm-thumb.jpg',
+    }, {
+      image: '/client/images/shirt-wo.jpg',
+      thumb: '/client/images/shirt-wo-thumb.jpg',
+    }, {
       image: '/client/images/shirt-front.jpg',
       thumb: '/client/images/shirt-front-thumb.jpg',
     }];
@@ -77,8 +83,8 @@ export default class Home extends React.PureComponent<{}> {
                 </tbody>
               </table>
               <sup>
-                Sizes run a tiny bit small, so bump it up if you're on the fence. Or
-                just show off that bod with a tight T, you do you.
+                Sizes run a tiny bit small after a wash or two, so bump it up if you're on the fence. Or
+                just show off that tight bod with a tight T, you do you.
               </sup>
 
               <h3 className="title">Shirt specs</h3>

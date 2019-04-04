@@ -1,23 +1,21 @@
+@import '../style/variables.scss';
+
 .Gallery {
+  display: flex;
+  flex-direction: row-reverse;
   margin-bottom: 2rem;
 
   &-main {
+    flex: 1;
     display: flex;
     justify-content: center;
     align-items: center;
     background: #000;
     overflow: hidden;
-    border-radius: 4px;
-    margin-bottom: 1rem;
-    max-height: 400px;
-
-    @media screen and (max-width: 680px) {
-      max-height: 260px;
-    }
 
     &-image {
-      height: 100%;
-      width: auto;
+      width: 100%;
+      height: auto;
       max-width: none;
       min-width: 0;
     }
@@ -25,45 +23,67 @@
 
   &-pager {
     display: flex;
-    justify-content: center;
+    flex-direction: column;
+    justify-content: flex-start;
     align-items: center;
+    flex-shrink: 0;
+    width: 6rem;
+    margin-right: 0.5rem;
 
-    &-button {
+    &-thumb {
+      position: relative;
       display: block;
-      width: 10px;
-      height: 10px;
       padding: 0;
       background: #FFF;
-      border: 4px solid #000;
-      margin: 0 1rem;
-      border-radius: 100%;
+      border: none;
+      margin-bottom: 0.5rem;
+      outline: none;
+
+      &:last-child {
+        margin-bottom: 0;
+      }
 
       &.is-active {
-        background: #000;
+        &:after {
+          content: '';
+          position: absolute;
+          top: 0;
+          left: 0;
+          right: 0;
+          bottom: 0;
+          box-shadow: 0 0 0 2px $red inset;
+        }
       }
     }
   }
 
-  &-thumbs {
-    display: flex;
-    align-items: center;
+  @media screen and (max-width: 768px) {
+    display: block;
 
-    &-thumb {
-      height: 3rem;
-      width: 3rem;
-      margin-right: 1rem;
-      cursor: pointer;
+    &-main {
+      height: 300px;
+      margin-bottom: 0.5rem;
 
-      &:last-child {
-        margin-right: 0;
+      &-image {
+        height: 300px;
+        width: auto;
       }
+    }
 
-      &:hover {
-        box-shadow: 0 0 0 4px rgba(#000, 0.2);
-      }
+    &-pager {
+      flex-direction: row;
+      width: auto;
 
-      &.is-active {
-        box-shadow: 0 0 0 4px #000;
+      &-thumb {
+        width: 6rem;
+        height: 6rem;
+        margin: 0 0.5rem 0 0;
+        overflow: hidden;
+
+        img {
+          width: 100%;
+          height: auto;
+        }
       }
     }
   }

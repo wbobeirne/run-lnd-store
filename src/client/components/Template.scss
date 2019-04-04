@@ -9,8 +9,12 @@
     display: flex;
     justify-content: space-between;
     align-items: center;
-    padding: 0.75rem 1.5rem;
+    padding: 0.75rem 2rem;
     margin-bottom: 0.75rem;
+
+    @media (max-width: 768px) {
+      padding: 0.75rem 1.25rem;
+    }
 
     &-logo {
       width: 4rem;
@@ -30,6 +34,15 @@
   &-content {
     flex-grow: 1;
     padding: 0 2rem 5rem;
+
+    @media (min-width: 1280px) {
+      max-width: 1020px;
+      width: 1020px;
+    }
+
+    @media (max-width: 768px) {
+      padding: 0 1.25rem 3rem;
+    }
   }
 
   &-footer {
@@ -69,7 +82,7 @@
       }
     }
 
-    @media (max-width: 620px) {
+    @media (max-width: 768px) {
       flex-direction: column;
 
       &-left,

@@ -3,11 +3,24 @@
     &-quote {
       margin: 1.5rem 0;
       padding-left: 1rem;
-      font-size: 2rem;
+      font-size: 1.75rem;
       opacity: 0.4;
       font-family: Georgia, serif;
       font-style: italic;
       border-left: 4px solid rgba(#000, 0.3);
+    }
+  }
+
+  @media screen and (max-width: 680px) {
+    &-title.title {
+      font-size: 1.3rem;
+      margin-bottom: 0.75rem;
+    }
+
+    &-description {
+      &-quote {
+        font-size: 1.2rem;
+      }
     }
   }
 }

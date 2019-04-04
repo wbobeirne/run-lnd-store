@@ -7,14 +7,9 @@ import env from '../env';
 const router = Router();
 
 async function verify(msg: string, signature: string, res: Response) {
-  // First validate a message and get their pubkey
   try {
     const verification = await verifyMessage({ msg, signature });
-    if (!verification.valid) {
-      res.status(400).json({ error: 'Could not verify your pubkey from signature. Make sure you’re on a mainnet node, and have at least one public channel open, and try again.' });
-      return false;
-    }
-    if (!verification.pubkey) {
+    if (!verification.valid || !verification.pubkey) {
       res.status(400).json({ error: 'Could not verify your pubkey from signature. Make sure you’re on a mainnet node, and have at least one public channel open, and try again.' });
       return false;
     }
@@ -39,7 +34,7 @@ router.get('/node', asyncHandler(async (req: Request, res: Response) => {
     const { node } = await getNode(pubkey);
     res.json({ data: node });
   } catch(err) {
-    res.status(400).json({ error: 'Could not find your node on the network, make sure you have at least one public channel and try again.' });
+    res.status(400).json({ error: 'Could not find your node on the network. Make sure you’re on a mainnet node, and have at least one public channel open, and try again.' });
   }
 }));
 
@@ -63,7 +58,7 @@ router.post('/verify', asyncHandler(async (req: Request, res: Response) => {
     });
   } catch(err) {
     console.error(err);
-    res.status(400).json({ error: 'Could not find your node on the network, make sure you have at least one public channel and try again.' });
+    res.status(400).json({ error: 'Could not find your node on the network. Make sure you’re on a mainnet node, and have at least one public channel open, and try again.' });
   }
 }));
 
@@ -103,7 +98,7 @@ router.post('/order', asyncHandler(async (req: Request, res: Response) => {
     res.status(201).json({ data: newOrder.serialize() });
   } catch(err) {
     console.error(err);
-    return res.status(500).json({ error: 'Failed to create invoice, it’s probably an issue on our end' });
+    return res.status(500).json({ error: 'Failed to create invoice for your order, it’s probably an issue on our end' });
   }
 }));
 
