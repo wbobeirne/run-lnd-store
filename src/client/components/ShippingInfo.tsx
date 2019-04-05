@@ -122,7 +122,9 @@ export default class ShippingInfo extends React.PureComponent<Props, State> {
         {submitError && (
           <article className="message is-danger">
             <div className="message-body">
-              Failed to submit order: {submitError}
+              {submitError}. Make sure all fields are filled out correctly,
+              and try again. If you continue to have problems, please contact
+              us and we'll get you sorted out.
             </div>
           </article>
         )}

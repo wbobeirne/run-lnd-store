@@ -138,7 +138,10 @@ export default class SignMessage extends React.Component<Props, State> {
     }
 
     // If we do, grab a signature and show an error if it fails.
-    this.setState({ isWeblnSigning: true });
+    this.setState({
+      isWeblnSigning: true,
+      weblnSignError: '',
+    });
     try {
       const res = await webln.signMessage(MESSAGE);
       this.setState({

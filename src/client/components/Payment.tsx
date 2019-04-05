@@ -199,7 +199,10 @@ export default class Payment extends React.PureComponent<Props, State> {
     }
 
     // If we do, try to send with WebLN
-    this.setState({ isWeblnPaying: true });
+    this.setState({
+      isWeblnPaying: true,
+      weblnPayError: '',
+    });
     try {
       await webln.sendPayment(order.paymentRequest);
     } catch(err) {
