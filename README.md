@@ -43,3 +43,10 @@ In case the server were compromied, the worst someone could do without the
 admin macaroon is DDOS your node, or generate an annoyingly large number of
 invoices. It's great that LND allows for you to have a site like this that
 only needs to accept money without exposing your funds.
+
+
+## Shoutouts
+
+* To [Lightning Labs](https://github.com/lightninglabs) and all of the contributors on LND, it's a mighty fine piece of software
+* To the folks at [Radar ION](https://ion.radar.tech) for writing a [damn good typed RPC library](https://github.com/RadarTech/lnrpc) for LND
+* To [@jamesob](https://github.com/jamesob) and [@mikeob](https://github.com/mikeob) for helping test and catching some bugs
