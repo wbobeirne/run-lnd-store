@@ -6,10 +6,10 @@
   "scripts": {
     "dev": "concurrently -n server,client 'npm run dev:server' 'npm run dev:client'",
     "dev:server": "nodemon",
-    "dev:client": "webpack --watch --config=./webpack.config.js",
+    "dev:client": "webpack --mode development --watch --config=./webpack.config.js",
     "build": "npm run build:server && npm run build:client",
     "build:server": "tsc && cp -r src/server/views build/views",
-    "build:client": "webpack --production",
+    "build:client": "webpack --mode production",
     "heroku-postbuild": "yarn build",
     "start": "node build/index.js"
   },
