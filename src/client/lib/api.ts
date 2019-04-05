@@ -73,7 +73,7 @@ class API {
     return this.request<Order>('POST', '/order', args);
   }
 
-  updateOrder(id: string | number, args: Partial<Order>) {
+  updateOrder(id: string | number, args: Partial<Order> & { message: string, signature: string }) {
     return this.request<Order>('PUT', `/order/${id}`, args);
   }
 

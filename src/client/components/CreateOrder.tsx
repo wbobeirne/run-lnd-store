@@ -71,8 +71,8 @@ class CreateOrder extends React.PureComponent<RouteComponentProps, State> {
       step: STEP.INFO,
       title: 'Shipping info',
       render: () => {
-        if (!order) throw new Error('Shipping info without order');
-        return <ShippingInfo order={order} onComplete={this.onComplete} />;
+        if (!order || !signature) throw new Error('Shipping info without order or signature');
+        return <ShippingInfo order={order} signature={signature} onComplete={this.onComplete} />;
       },
     }];
     const activeStep = steps.find(s => s.step === step) || steps[0];

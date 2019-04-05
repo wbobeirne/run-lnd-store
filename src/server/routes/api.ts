@@ -126,6 +126,9 @@ router.get('/order/:id', async (req: Request, res: Response) => {
 
 
 router.put('/order/:id', async (req: Request, res: Response) => {
+  const { message, signature } = req.body;
+  await verify(message, signature, res);
+
   const order = await Order.findByPk(req.params.id);
   if (!order) {
     return res.status(404).json({ error: 'No order found' });

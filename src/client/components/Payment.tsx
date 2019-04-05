@@ -5,7 +5,7 @@ import { requestProvider } from 'webln';
 import Loader from './Loader';
 import OrderSummary from './OrderSummary';
 import api, { Order } from '../lib/api';
-import { MESSAGE, SIZE, SIZE_LABELS } from '../../server/constants';
+import { MESSAGE, SIZE } from '../../server/constants';
 import './Payment.scss';
 
 interface Props {

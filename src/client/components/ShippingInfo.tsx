@@ -1,9 +1,10 @@
 import React from 'react';
-import Loader from './Loader';
 import api, { Order } from '../lib/api';
+import { MESSAGE } from '../../server/constants';
 
 interface Props {
   order: Order;
+  signature: string;
   onComplete(order: Order): void;
 }
 
@@ -175,7 +176,11 @@ export default class ShippingInfo extends React.PureComponent<Props, State> {
       submitError: '',
     });
     try {
-      const order = await api.updateOrder(this.props.order.id, this.state.form);
+      const order = await api.updateOrder(this.props.order.id, {
+        ...this.state.form,
+        message: MESSAGE,
+        signature: this.props.signature,
+      });
       this.props.onComplete(order);
     } catch(err) {
       this.setState({

@@ -111,9 +111,9 @@ export default class SignMessage extends React.Component<Props, State> {
             >
               Submit
             </button>
-            <button className="button" type="button">
+            <a href="/" className="button" type="button">
               Cancel order
-            </button>
+            </a>
           </div>
         </form>
       );
