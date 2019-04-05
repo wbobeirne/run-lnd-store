@@ -214,8 +214,14 @@ export default class Payment extends React.PureComponent<Props, State> {
   };
 
   private subscribeToOrder = (order: Order) => {
-    const ws = api.subscribeToOrder(order.id);
-    (window as any).willsWs = ws;
+    let ws: WebSocket;
+    try {
+      ws = api.subscribeToOrder(order.id);
+    } catch(err) {
+      this.setState({ getOrderError: err.message || 'Could not open connection with server' });
+      return;
+    }
+
     ws.addEventListener('message', ev => {
       const data = JSON.parse(ev.data.toString());
       if (data.success) {
@@ -228,12 +234,16 @@ export default class Payment extends React.PureComponent<Props, State> {
         this.setState({ getOrderError: data.error }, () => ws.close());
       }
     });
-    ws.addEventListener('close', () => {
+
+    const showError = (ev: any) => {
+      console.log(ev);
       if (!this.state.hasPaid || !this.state.hasExpired) {
         this.setState({
           getOrderError: 'Your connection to the server closed unexpectedly. Please try again, or go through the checkout flow again. If you continue to have trouble, please contact us.',
         });
       }
-    });
+    };
+    ws.addEventListener('close', showError);
+    ws.addEventListener('error', showError);
   };
 }

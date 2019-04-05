@@ -45,7 +45,6 @@ sequelize.sync({ force: false }).then(() => {
 
   // Keep an eye out for paid invoices, in case the API stream isn't watching
   getInvoiceStream().on('data', async (chunk) => {
-    console.log(chunk);
     if (chunk.settled && chunk.rHash) {
       const rHash = rHashBufferToStr(chunk.rHash);
       const order = await Order.findOne({

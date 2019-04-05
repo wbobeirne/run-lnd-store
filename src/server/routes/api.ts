@@ -162,6 +162,17 @@ router.ws('/order/:id/subscribe', async (ws, req) => {
     });
   };
 
+  // Ping intermittently to keep connection alive
+  let isWsOpen = true;
+  const ping = () => {
+    if (!isWsOpen) {
+      return;
+    }
+    ws.send(JSON.stringify({ ping: true }));
+    setTimeout(ping, 10000);
+  };
+  setTimeout(ping, 10000);
+
   if (!order) {
     return sendAndClose({ error: 'No order found' });
   }
@@ -210,6 +221,11 @@ router.ws('/order/:id/subscribe', async (ws, req) => {
   });
 
   ws.on('close', () => {
+    isWsOpen = false;
+    stream.removeListener('data', onChunk);
+  });
+  ws.on('error', () => {
+    isWsOpen = false;
     stream.removeListener('data', onChunk);
   });
 });
