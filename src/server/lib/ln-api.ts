@@ -4,6 +4,7 @@ import createLnRpc, {
   Invoice,
   VerifyMessageRequest,
   InvoiceSubscription,
+  ListInvoiceRequest,
 } from '@radar/lnrpc';
 import { Readable } from 'stream';
 import env from '../env';
@@ -65,6 +66,16 @@ export function verifyMessage(args: VerifyMessageRequest) {
 export function getNode(pubKey: string) {
   checkInitialized();
   return readonlyLnRpc.getNodeInfo({ pubKey });
+}
+
+export function getInvoice(rHashStr: string) {
+  checkInitialized();
+  return readonlyLnRpc.lookupInvoice({ rHashStr });
+}
+
+export function getInvoices(args: ListInvoiceRequest) {
+  checkInitialized();
+  return readonlyLnRpc.listInvoices(args);
 }
 
 export function getInvoiceStream() {

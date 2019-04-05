@@ -1,6 +1,6 @@
-import { Router, Request, Response, NextFunction } from 'express';
+import { Router, Request, Response } from 'express';
 import asyncHandler from 'express-async-handler';
-import { verifyMessage, createInvoice, getNode, getInvoiceStream } from '../lib/ln-api';
+import { verifyMessage, createInvoice, getNode, getInvoiceStream, getInvoice } from '../lib/ln-api';
 import { Order } from '../db';
 import env from '../env';
 
@@ -73,9 +73,21 @@ router.post('/order', asyncHandler(async (req: Request, res: Response) => {
   }
 
   // If we already have an active order for them, return it
-  const activeOrder = await Order.getActiveOrderForPubkey(pubkey);
-  if (activeOrder) {
-    return res.json({ data: activeOrder.serialize() });
+  const latestOrder = await Order.getLatestOrderForPubkey(pubkey);
+  if (latestOrder) {
+    // Check if the invoice got settled at some point, mark it as so
+    try {
+      const invoice = await getInvoice(latestOrder.rHash);
+      if (invoice.settled) {
+        await latestOrder.update({ hasPaid: true });
+      }
+    } catch(err) {
+      console.error('Attempted to lookup invoice for order', latestOrder.id, 'but it failed:', err.message);
+    }
+
+    if (latestOrder.hasPaid || !latestOrder.isExpired()) {
+      return res.json({ data: latestOrder.serialize() });
+    }
   }
 
   // Otherwise create a new invoice & order

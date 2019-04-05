@@ -79,6 +79,13 @@ export class Order extends Model<Order> {
     });
   }
 
+  static async getLatestOrderForPubkey(pubkey: string) {
+    return Order.findOne({
+      where: { pubkey },
+      order: [['createdAt', 'DESC']],
+    })
+  }
+
   static async getStock() {
     // Initialize stocks. Copy paste instead of loop for easier TS typing.
     interface StockInfo {
