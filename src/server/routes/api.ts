@@ -2,6 +2,7 @@ import { Router, Request, Response } from 'express';
 import asyncHandler from 'express-async-handler';
 import { verifyMessage, createInvoice, getNode, getInvoiceStream, getInvoice } from '../lib/ln-api';
 import { Order } from '../db';
+import { rHashBufferToStr } from '../util';
 import env from '../env';
 
 const router = Router();
@@ -103,7 +104,7 @@ router.post('/order', asyncHandler(async (req: Request, res: Response) => {
       size,
       expires: new Date(Date.now() + expiry * 1000),
       paymentRequest: invoice.paymentRequest,
-      rHash: Buffer.from(invoice.rHash as Uint8Array).toString('hex'),
+      rHash: rHashBufferToStr(invoice.rHash),
       addIndex: invoice.addIndex,
       hasPaid: false,
     });
@@ -173,20 +174,29 @@ router.ws('/order/:id/subscribe', async (ws, req) => {
   // Open up stream with invoice to find out when they pay
   const stream = getInvoiceStream();
   let expiresTimeout: NodeJS.Timeout;
-  stream.on('data', chunk => {
+  const onChunk = (chunk: any) => {
+    // Ignore other invoice events
+    if (rHashBufferToStr(chunk.rHash) !== order.rHash) {
+      return;
+    }
+
     // Send an expired event after time has elapsed
     if (chunk.expiry && chunk.creationDate && !expiresTimeout) {
       const expiryDate = new Date((parseInt(chunk.creationDate, 10) + parseInt(chunk.expiry, 10)) * 1000);
       const msToExpiry = expiryDate.getTime() - Date.now();
-      expiresTimeout = setTimeout(() => sendAndClose({ expired: true }), msToExpiry);
+      expiresTimeout = setTimeout(() => sendAndClose({ expired: true }), msToExpiry + 3000);
     }
 
     if (chunk.settled) {
+      console.log('Received a payment of', chunk.amtPaidSat, 'sats for order', order.id);
       clearTimeout(expiresTimeout);
-      order.update({ hasPaid: true });
-      sendAndClose({ success: true });
+      order.update({ hasPaid: true }).then(() => {
+        sendAndClose({ success: true });
+      });
     }
-  });
+  };
+
+  stream.on('data', onChunk);
   stream.on('error', err => {
     console.error('Encountered error in invoice stream:', err);
     ws.close();
@@ -197,7 +207,7 @@ router.ws('/order/:id/subscribe', async (ws, req) => {
   });
 
   ws.on('close', () => {
-    stream.removeAllListeners();
+    stream.removeListener('data', onChunk);
   });
 });
 

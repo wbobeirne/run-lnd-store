@@ -41,7 +41,7 @@ export default class ShippingInfo extends React.PureComponent<Props, State> {
   };
 
   render() {
-    const { form, isSubmitting, submitError, hasConsented } = this.state;
+    const { isSubmitting, submitError, hasConsented } = this.state;
     const isDisabled = !hasConsented || isSubmitting;
 
     return (

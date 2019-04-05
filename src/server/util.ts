@@ -9,3 +9,7 @@ export function commaify(text: string | number) {
   pieces[0] = pieces[0].replace(/\B(?=(\d{3})+(?!\d))/g, ',');
   return pieces.join('.');
 }
+
+export function rHashBufferToStr(rHash: any): string {
+  return Buffer.from(rHash as Uint8Array).toString('hex')
+}

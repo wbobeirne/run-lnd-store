@@ -60,8 +60,10 @@ export default class SignMessage extends React.Component<Props, State> {
     } else if (weblnSignError) {
       content = (
         <div className="SignMessage-error">
-          <div className="notification is-danger">
-            {weblnSignError}
+          <div className="message is-danger">
+            <div className="message-body">
+              {weblnSignError}
+            </div>
           </div>
           <div className="SignMessage-error-buttons buttons is-centered">
             <button className="button is-primary" onClick={this.weblnSign}>
@@ -148,7 +150,7 @@ export default class SignMessage extends React.Component<Props, State> {
     } catch(err) {
       this.setState({
         isWeblnSigning: false,
-        weblnSignError: `Failed to sign: ${err.message || err}`,
+        weblnSignError: `${err.message || err}. Please try again, or complete the signature via the command line. If you’re having trouble signing with Joule, make sure your LND node is up to date.`,
       })
     }
   };

@@ -4,8 +4,9 @@ import bodyParser from 'body-parser';
 import path from 'path';
 import enforce from 'express-sslify';
 import env from './env';
-import { sequelize } from './db';
-import { initLnApi } from './lib/ln-api';
+import { sequelize, Order } from './db';
+import { initLnApi, getInvoiceStream } from './lib/ln-api';
+import { rHashBufferToStr } from './util';
 
 // Configure server
 const app = express();
@@ -40,5 +41,20 @@ sequelize.sync({ force: false }).then(() => {
   console.log('Starting REST server...');
   app.listen(env.PORT, () => {
     console.log(`REST server started on port ${env.PORT}!`);
+  });
+
+  // Keep an eye out for paid invoices, in case the API stream isn't watching
+  getInvoiceStream().on('data', async (chunk) => {
+    console.log(chunk);
+    if (chunk.settled && chunk.rHash) {
+      const rHash = rHashBufferToStr(chunk.rHash);
+      const order = await Order.findOne({
+        where: { rHash },
+      });
+      if (order) {
+        console.log('Received a payment of', chunk.amtPaidSat, 'sats for order', order.id);
+        order.update({ hasPaid: true });
+      }
+    }
   });
 });

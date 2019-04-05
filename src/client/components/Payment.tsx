@@ -22,7 +22,6 @@ interface State {
   weblnPayError: string;
   hasPaid: boolean;
   hasExpired: boolean;
-  existingOrder: boolean;
 }
 
 export default class Payment extends React.PureComponent<Props, State> {
@@ -34,7 +33,6 @@ export default class Payment extends React.PureComponent<Props, State> {
     weblnPayError: '',
     hasPaid: false,
     hasExpired: false,
-    existingOrder: false,
   };
 
   componentDidMount() {
@@ -42,7 +40,7 @@ export default class Payment extends React.PureComponent<Props, State> {
   }
 
   render() {
-    const { order, isGettingOrder, isWeblnPaying, getOrderError, hasPaid, hasExpired, existingOrder } = this.state;
+    const { order, isGettingOrder, isWeblnPaying, getOrderError, hasPaid, hasExpired, weblnPayError } = this.state;
 
     let content;
     if (hasPaid || (order && order.hasPaid && !order.email)) {
@@ -63,10 +61,16 @@ export default class Payment extends React.PureComponent<Props, State> {
     } else if (hasExpired) {
       content = (
         <>
-          <div className="notification is-danger">
-            Your order has expired. You can return to the homepage to try again.
-            If you experienced routing issues, you can try to open a channel
-            with our node.
+          <div className="message is-warning">
+            <div className="message-body">
+              Your order has expired. You can return to the homepage to try again.
+              If you experienced routing issues, you can try to open a channel
+              with our node (Details in the footer.)
+              <br />
+              <br />
+              If you paid and didn't expect this to happen, please contact us
+              for help.
+            </div>
           </div>
           <a href="/" className="button is-primary">
             Start over
@@ -75,6 +79,19 @@ export default class Payment extends React.PureComponent<Props, State> {
       );
     } else if (isGettingOrder) {
       content = <Loader message="Getting order details..." />
+    } else if (getOrderError) {
+      content = (
+        <>
+          <div className="message is-danger">
+            <div className="message-body">
+              {getOrderError}
+            </div>
+          </div>
+          <button className="button is-primary" onClick={this.getOrder}>
+            Try again
+          </button>
+        </>
+      );
     } else if (isWeblnPaying) {
       content = <Loader message="Sending payment with WebLN..." />
     } else if (order) {
@@ -106,32 +123,28 @@ export default class Payment extends React.PureComponent<Props, State> {
         );
       } else {
         content = (
-          <div className="Payment-order">
-            <a href={`lightning:${order.paymentRequest}`} className="Payment-order-qr">
-              <QRCode value={order.paymentRequest.toUpperCase()} fgColor="#F70000" size={200} />
-            </a>
-            <div className="Payment-order-invoice">
-              <textarea className="textarea" readOnly value={order.paymentRequest} rows={5} />
-              <a href={`lightning:${order.paymentRequest}`} className="button is-primary is-medium">
-                Open in Wallet ⚡
+          <>
+            {weblnPayError && (
+              <div className="message is-danger">
+                <div className="message-body">
+                  {weblnPayError}
+                </div>
+              </div>
+            )}
+            <div className="Payment-order">
+              <a href={`lightning:${order.paymentRequest}`} className="Payment-order-qr">
+                <QRCode value={order.paymentRequest.toUpperCase()} fgColor="#F70000" size={200} />
               </a>
+              <div className="Payment-order-invoice">
+                <textarea className="textarea" readOnly value={order.paymentRequest} rows={5} />
+                <a href={`lightning:${order.paymentRequest}`} className="button is-primary is-medium">
+                  Open in Wallet ⚡
+                </a>
+              </div>
             </div>
-          </div>
+          </>
         );
       }
-    } else if (getOrderError) {
-      content = (
-        <>
-          <div className="message is-danger">
-            <div className="message-body">
-              {getOrderError}
-            </div>
-          </div>
-          <button className="button is-primary" onClick={this.getOrder}>
-            Try again
-          </button>
-        </>
-      );
     }
 
     return (
@@ -152,6 +165,7 @@ export default class Payment extends React.PureComponent<Props, State> {
       this.setState({
         order,
         isGettingOrder: false,
+        getOrderError: '',
       }, () => {
         if (!order.hasPaid) {
           this.subscribeToOrder(order);
@@ -191,13 +205,14 @@ export default class Payment extends React.PureComponent<Props, State> {
     } catch(err) {
       this.setState({
         isWeblnPaying: false,
-        weblnPayError: `Payment failed: ${err.message || err}`,
+        weblnPayError: `${err.message || 'WebLN payment failed'}. You can try paying below.`,
       })
     }
   };
 
   private subscribeToOrder = (order: Order) => {
     const ws = api.subscribeToOrder(order.id);
+    (window as any).willsWs = ws;
     ws.addEventListener('message', ev => {
       const data = JSON.parse(ev.data.toString());
       if (data.success) {
@@ -212,7 +227,9 @@ export default class Payment extends React.PureComponent<Props, State> {
     });
     ws.addEventListener('close', () => {
       if (!this.state.hasPaid || !this.state.hasExpired) {
-        this.setState({ getOrderError: 'Something went wrong while waiting for payment' });
+        this.setState({
+          getOrderError: 'Your connection to the server closed unexpectedly. Please try again, or go through the checkout flow again. If you continue to have trouble, please contact us.',
+        });
       }
     });
   };
