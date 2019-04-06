@@ -53,9 +53,14 @@ class OrderBox extends React.PureComponent<RouteComponentProps, State> {
           <div className="OrderBox-size-select select">
             <select onChange={this.handleChangeSize} value={size || ''} disabled={!stock}>
               <option value="" disabled>Select a size</option>
-              {typedKeys(SIZE).map(s => (
-                <option key={s} value={s}>{SIZE_LABELS[s]}</option>
-              ))}
+              {typedKeys(SIZE).map(s => {
+                const available = stock ? stock[s].available : 0;
+                return (
+                  <option key={s} value={s} disabled={available <= 0}>
+                    {SIZE_LABELS[s]} {available <= 0 && '(SOLD OUT)'}
+                  </option>
+                );
+              })}
             </select>
           </div>
         </div>
